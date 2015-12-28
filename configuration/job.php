@@ -9,7 +9,9 @@ $host=sanitizeInput($_POST['host']);
 $user=sanitizeInput($_POST['user']);
 $psw=sanitizeInput($_POST['psw']);
 //all input sanitized by sanitizedInput function
-
+$salt=$_POST['salt'];
+$pepper=strrev($salt);
+//salt is not sanitized, for now..
 
 //creating connection
 $connection=new mysqli($host,$user,$psw);
@@ -50,6 +52,8 @@ define('DB','$dbName');
 define('HOST','$host');
 define('USER','$user');
 define('PSW','$psw');
+define('SALT','$salt');
+define('PEPPER','$pepper');
 
 ?>
 ";
@@ -68,9 +72,10 @@ if(isset($_POST['configureAdmin']))
     $adminName=sanitizeInput($_POST['adminName']);
     $adminSurName=sanitizeInput($_POST['adminSurName']);
     $adminPassword=sanitizeInput($_POST['adminPassword']);
+
     
     //salting password
-    $saltedPassword=salting($adminPassword);
+    $saltedPassword=salting($adminPassword,SALT,PEPPER);
     $connection=new mysqli(HOST,USER,PSW,DB);
     if($connection->connect_error)
     {
@@ -93,7 +98,7 @@ if(isset($_POST['configureAdmin']))
         echoResponse('no',$connection->error);
     }
     //adding Admin
-    $addAdmin="INSERT INTO users (username,name,surname,position,password) VALUES ('$adminUserName','$adminName','$adminSurName','admin','$adminPassword')";
+    $addAdmin="INSERT INTO users (username,name,surname,position,password) VALUES ('$adminUserName','$adminName','$adminSurName','admin','$saltedPassword')";
     if($connection->query($addAdmin))
     {
         echoResponse('yes','Admin and users table correctly created!');

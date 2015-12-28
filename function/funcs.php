@@ -16,10 +16,8 @@ function echoResponse($stat,$resp)
     if($stat=='no') die();
 }
 
-function salting($password)
+function salting($password,$salt,$pepper)
 {
-    $salt="$4lt";
-    $pepper="P3ppe£";
     $token=$salt.$password.$pepper;
     $token=hash('ripemd128',"$token");
     return $token;

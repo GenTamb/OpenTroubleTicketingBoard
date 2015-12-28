@@ -7,9 +7,11 @@
  *-         db creation with form submit            -*
  *---------------------------------------------------*/
 
-define('DB','a1test');
+define('DB','aTest');
 define('HOST','localhost');
 define('USER','root');
 define('PSW','');
+define('SALT','ciccio');
+define('PEPPER','oiccic');
 
 ?>

@@ -5,13 +5,14 @@ $(document).ready(function(){
         var host=$("#host").val();
         var user=$("#user").val();
         var psw=$("#psw").val();
+        var salt=$("#salt").val();
         if (/^[0-9.@_-]/.test(dbName) || /#/.test(dbName))
         {
             alert("DB's Name cannot start with 0-9 or .@_-\nor contain #");
         }
         else
         {
-        if (dbName=="" || host=="" || user=="")
+        if (dbName=="" || host=="" || user=="" || salt=="")
         {
             alert("All/some fields are empty!\nFill them!");
         }
@@ -23,7 +24,8 @@ $(document).ready(function(){
                     dbName:dbName,
                     host:host,
                     user:user,
-                    psw:psw
+                    psw:psw,
+                    salt:salt
                    },
                    function(data)
                    {
