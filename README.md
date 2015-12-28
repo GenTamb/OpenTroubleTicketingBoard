@@ -22,7 +22,7 @@ What the SETUP does?
 4) acquires admin's info
 5) generate the users table, adding the admin
 6) acquires board's info 
-6) generate the board table, adding the data just inserted
+7) generate the board table, adding the data just inserted
 
 TO DO:
 1) board's home
