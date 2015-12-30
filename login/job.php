@@ -37,6 +37,7 @@ else
     {
         $answer[0]=0;
         echo json_encode($answer);
-}
+    }
+    $connection->close();
 }
 ?>
