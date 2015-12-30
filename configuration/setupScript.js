@@ -104,7 +104,7 @@ $(document).ready(function(){
                      if(data[0]=='yes')
                      {
                         $("#setupBoardForm").addClass("divHidden");
-                        //$("#setupBoardForm").removeClass("divHidden");
+                        $("#setupComplete").removeClass("divHidden");
                      }
                      alert(data[1]);
                    },
@@ -113,3 +113,26 @@ $(document).ready(function(){
         }
     }); 
 });
+$(document).ready(function(){
+    $("#done").click(function(){
+            $.post("configuration/job.php",
+                   {
+                    finishSetup: 1
+                   },
+                   function(data)
+                   {
+                     
+                     if(data[0]=='yes')
+                     {
+                        alert(data[1]);
+                        window.location.replace("login.php");
+                     }
+                     else
+                     {
+                        alert(data[1]);
+                     }
+                   },
+                   "json"
+                   );
+        });
+    }); 

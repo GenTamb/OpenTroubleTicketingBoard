@@ -143,6 +143,20 @@ if(isset($_POST['configureBoard']))
     $connection->close();
 }
 
+if(isset($_POST['finishSetup'])){
+    require_once "db.php";
+    if(!copy('../setup.php','../_installFolder/setup.php'))
+    {
+        echoResponse('no',"Error finishing setup: error copying files, check your permissions on disk!");
+    }
+    else
+    {
+        unlink('../setup.php');
+        rename('../_installFolder/login.php','../login.php');
+        echoResponse('yes',"Yes! We did it!\nEnjoy your board!");
+    }
+}
+
 
 
 ?>
