@@ -12,7 +12,7 @@ but I need something to work on during my spare time :)
 
 This time, the entire project will be in English.
 
-For now, i've completed the setup step.
+-setup step:
 
 What the SETUP does?
 
@@ -23,6 +23,12 @@ What the SETUP does?
 5) generate the users table, adding the admin
 6) acquires board's info 
 7) generate the board table, adding the data just inserted
+8) move setup.php in _installFolder and move login.php to root
+
+-login step:
+1) check if setup is completed: if not, tries to do it, otherwise ask for a new installation
+2) just login user :)
+
 
 TO DO:
 1) board's home
