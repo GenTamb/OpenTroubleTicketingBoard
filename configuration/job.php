@@ -4,6 +4,7 @@ require_once "../function/funcs.php";
 //setting up DataBase 
 if(isset($_POST['configureDB']))
 {
+session_start();
 $dbName=sanitizeInput($_POST['dbName']);
 $host=sanitizeInput($_POST['host']);
 $user=sanitizeInput($_POST['user']);
@@ -39,6 +40,7 @@ $connection->close();
 
 if($configFile=fopen("db.php","w"))
 {
+    $dirname=$_SESSION['root'];
     $txt="<?php
 
 /*
@@ -54,7 +56,7 @@ define('USER','$user');
 define('PSW','$psw');
 define('SALT','$salt');
 define('PEPPER','$pepper');
-
+define('ROOT','$dirname');
 ?>
 ";
 fwrite($configFile,$txt);
@@ -67,7 +69,7 @@ else echoResponse('no',"Unable to create config.php!\nCheck your permission on d
 if(isset($_POST['configureAdmin']))
 {
     //requiring the db.php file just created
-    require_once "db.php";
+    require_once ROOT."/configuration/db.php";
     $adminUserName=sanitizeInput($_POST['adminUserName']);
     $adminName=sanitizeInput($_POST['adminName']);
     $adminSurName=sanitizeInput($_POST['adminSurName']);
@@ -112,7 +114,7 @@ if(isset($_POST['configureAdmin']))
 if(isset($_POST['configureBoard']))
 {
     
- require_once "db.php";
+ require_once ROOT."/configuration/db.php";
  $boardName=sanitizeInput($_POST['boardName']);
  $organizationName=sanitizeInput($_POST['organizationName']);
  
@@ -142,8 +144,9 @@ if(isset($_POST['configureBoard']))
     
     $connection->close();
 }
-
-if(isset($_POST['finishSetup'])){
+//closing operations
+if(isset($_POST['finishSetup']))  
+   {
     require_once "db.php";
     if(!copy('../setup.php','../_installFolder/setup.php'))
     {
@@ -155,7 +158,106 @@ if(isset($_POST['finishSetup'])){
         rename('../_installFolder/login.php','../login.php');
         echoResponse('yes',"Yes! We did it!\nEnjoy your board!");
     }
+   }
+
+//login procedure   
+if(isset($_POST['login']))
+{
+    require_once 'db.php';
+    require_once ROOT.'/function/funcs.php';
+
+    $username=sanitizeInput($_POST['username']);
+    $password=sanitizeInput($_POST['password']);
+
+    $password=salting($password,SALT,PEPPER);
+
+    $connection=new mysqli(HOST,USER,PSW,DB);
+
+   if($connection->connect_error)
+   {
+       echo $connection->connect_error;
+       die('error'.$connection->connect_error);
+   }
+   else
+   {
+       $query="SELECT * FROM users WHERE username='$username' AND password='$password'";
+       $check=$connection->query($query);
+       if(!$check) die($connection->error);
+       $row=$check->num_rows;
+    
+       if($row==1)
+       {
+           $res=$check->fetch_assoc();
+           session_start();
+           $_SESSION['logged']=1;
+           $_SESSION['username']=$res['username'];
+           $_SESSION['name']=$res['name'];
+           $_SESSION['surname']=$res['surname'];
+           $_SESSION['position']=$res['position'];
+           $answer=array(1,$res['name'],$res['surname']);
+           echo json_encode($answer);
+       }
+       else
+       {
+           $answer[0]=0;
+           echo json_encode($answer);
+       }
+       $connection->close();
+   }
 }
+
+//to fix
+if(isset($_POST['addingFirstGroupName'])){
+    include_once 'db.php';
+    include_once '../function/funcs.php';
+    
+    if(checkFirstSetup())
+    {
+        $connection=new mysqli(HOST,USER,PSW,DB);
+        if($connection->error) echoResponse('no',$connection->error);
+        $addingField='ALTER TABLE board ADD firstSetup SMALLINT UNSIGNED';
+        $added=$connection->query($addingField);
+        if(!$added) echoResponse('no',$added->error);
+        else
+        {
+            //echoResponse('yes','Field Added!');
+            $settingFirstSetup="UPDATE board SET firstSetup='1' WHERE boardName='".getBoardName()."'";
+            $settedFirstSetup=$connection->query($settingFirstSetup);
+            if(!$settedFirstSetup) echoResponse('no',$settedFirstSetup->error);
+            else
+            {
+                //echoResponse('yes','First Setup Done!');
+                $remoteGroupName=sanitizeInput($_POST['remoteGroupName']);
+                
+                if(addGroupName($remoteGroupName))
+                {
+                    $addingField='ALTER TABLE users ADD groupName varchar(20)';
+                    $added=$connection->query($addingField);                   //groupName added to users table
+                    
+                    $queryModifyAdmin="UPDATE users SET groupName='$remoteGroupName' WHERE username='".getAdminUsername()."'";
+                    $executeModifyAdmin=$connection->query($queryModifyAdmin);
+                    $connection->close();
+                    echoResponse('yes',"Table $remoteGroupName created and other table modified successfully!");
+                }
+                else
+                {
+                  echoResponse('no','error creating table');
+                }
+            }
+        }
+        //echoResponse('yes','it works');
+    }
+    else
+    {
+        echoResponse('yes','First setup already done!');
+    }
+
+    
+}
+
+
+//closed if($_SERVER['REQUEST_METHOD']=='POST')
+
 
 
 

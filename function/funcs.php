@@ -44,7 +44,7 @@ function checkInstallation()
 
 function getBoardName()
 {
-    require_once 'configuration/db.php';
+    
     $boardName;
     $res;
     $connection= new mysqli(HOST,USER,PSW,DB);
@@ -61,7 +61,7 @@ function getBoardName()
 }
 function getOrgName()
 {
-    require_once 'configuration/db.php';
+    
     $boardName;
     $res;
     $connection= new mysqli(HOST,USER,PSW,DB);
@@ -76,4 +76,104 @@ function getOrgName()
     }
     
 }
+
+function checkLogin()
+{
+    if(include_once ('db.php'))
+    {
+        $loginPath=ROOT."login.php";
+    }
+    else if(include_once ('../configuration/db.php'))
+            {
+                $loginPath="../login.php";
+            }
+    else $loginPath='login.php';
+    
+    if(!isset($_SESSION['logged']))
+    {
+        //doAlert('Not even logged!');
+        header("Location:login.php");
+    }
+    else if($_SESSION['logged']!=1)
+    {
+        //doAlert('Something gone wrong with your login');
+        
+        header("Location:$loginPath");
+    }
+    else if($_SESSION['logged']==1)
+    {
+     return true;
+    }
+}
+
+function setupUser($user)
+{
+    
+    $user->setUsername($_SESSION['username']);
+    $user->setName($_SESSION['name']);
+    $user->setSurname($_SESSION['surname']);
+    $user->setPosition($_SESSION['position']);
+}
+
+//check first setup
+function checkFirstSetup()
+{
+  include_once 'db.php';                     //include this
+  include_once '../configuration/db.php';   // or this..
+  $response;
+  $connection=new mysqli(HOST,USER,PSW,DB);
+  $query='SELECT * FROM board WHERE 1';
+  $res=$connection->query($query);
+  if(!$res) die('error'.$connection->error);
+  else
+    {
+        $fields=$res->field_count;
+        if($fields==2)  $response=true;
+        else $response=false;
+    }
+ $res->close();
+ $connection->close();
+ return $response;
+}
+
+function addGroupName($name)
+{
+    include_once '../configuration/db.php';
+    include_once 'db.php';
+    $name=sanitizeInput($name);
+    $addGroupQuery="CREATE TABLE $name
+                      (username varchar(20),
+                       name varchar(15),
+                       surname varchar(15),
+                       INDEX(username(20)),
+                       INDEX(name(15)),
+                       INDEX(surname(15)),
+                       PRIMARY KEY(username)) ENGINE InnoDB";
+    $connection=new mysqli(HOST,USER,PSW,DB);
+    $execute=$connection->query($addGroupQuery);
+    if(!$execute) die('error doing query');
+    else
+    {
+        
+        $connection->close();
+        return true;
+    }
+}
+
+function getAdminUsername() //this works only for the first admin
+{
+    include_once '../configuration/db.php';
+    include_once 'db.php';
+    $connection=new mysqli(HOST,USER,PSW,DB);
+    $query="SELECT username FROM users WHERE 1"; //it returns only 1 result
+    if(!$res=$connection->query($query)) die('error'.$connection->connect_errno);
+    else
+    {
+        $row=$res->fetch_assoc();
+        $username=$row['username'];
+        $connection->close();
+        return $username;
+    }
+}
+
 ?>

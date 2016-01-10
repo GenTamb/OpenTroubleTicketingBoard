@@ -1,7 +1,3 @@
-<?php
-session_start();
-$_SESSION['root']=dirname(__FILE__);
-?>
 <!DOCTYPE html>
 <head>
   <title>OpenTroubleTicketing: Setup</title>
@@ -41,7 +37,7 @@ $_SESSION['root']=dirname(__FILE__);
                 <label for="salt">Enter a salt for securing password</label>
                 <input type="text" class="form-control" id="salt" size="30" placeholder="Be creative :)">
             </div>
-            <input type="submit" id="send1" class="btn btn-warning btn-sm" name='submit' value="Submit">
+            <input type="submit" id="send1" class="btn btn-warning btn-sm" name='submit' value="Submit"</input>
         </form>
     </div>
     <div class="container-fluid defaultWidth divHidden" id="setupAdminform">

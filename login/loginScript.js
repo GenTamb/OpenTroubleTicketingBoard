@@ -9,8 +9,9 @@ $(document).ready(function(){
            }
         else
         {
-            $.post('login/job.php',
+            $.post('configuration/job.php',
                 {
+                    login:1,
                     username:username,
                     password:password
                 },
