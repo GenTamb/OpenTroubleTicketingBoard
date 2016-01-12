@@ -1,3 +1,13 @@
 .divHidden{
     display:none;
 }
+
+.customBorder{
+    border: 1px solid black;
+    margin: 30px;
+    padding: 20px;
+}
+
+.btn{
+    margin: 10px;
+}

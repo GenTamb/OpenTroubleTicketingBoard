@@ -141,10 +141,12 @@ function addGroupName($name)
     include_once '../configuration/db.php';
     include_once 'db.php';
     $name=sanitizeInput($name);
-    $addGroupQuery="CREATE TABLE $name
+    $addGroupQuery="CREATE TABLE IF NOT EXISTS $name
                       (username varchar(20),
                        name varchar(15),
                        surname varchar(15),
+                       mail varchar(50),
+                       phone varchar(20),
                        INDEX(username(20)),
                        INDEX(name(15)),
                        INDEX(surname(15)),
@@ -156,24 +158,80 @@ function addGroupName($name)
     {
         
         $connection->close();
+        /*$path=ROOT."/configuration/db.php";   experimental
+        $appendFile=fopen("$path","a");
+        $text="<?php define('$name','$name');?>";
+        fwrite($appendFile,$text);
+        fclose();*/ 
         return true;
     }
 }
 
-function getAdminUsername() //this works only for the first admin
+/*function addGroup($tableName,$username,$length1,$name,$length2,$surname,$length3)   experimental
+{
+    include_once '../configuration/db.php';
+    include_once 'db.php';
+    $numArgs=func_get_args();
+    foreach($numArgs as $arg) $arg=sanitizeInput($arg);  //sanitizing all inputs
+    if(is_numeric($length1) && is_numeric($length2) && is_numeric($length3))
+    {
+     $addGroupQuery="CREATE TABLE IF NOT EXISTS".$tableName."
+                     ($username   
+     "
+    }
+    
+    
+}*/
+
+function getAdminData($admin) //this is used first time to get the one and only admin, later, can be reused, maybe
 {
     include_once '../configuration/db.php';
     include_once 'db.php';
     $connection=new mysqli(HOST,USER,PSW,DB);
-    $query="SELECT username FROM users WHERE 1"; //it returns only 1 result
+    $query="SELECT username,name,surname FROM users WHERE position='$admin'"; //it returns only 1 result
     if(!$res=$connection->query($query)) die('error'.$connection->connect_errno);
     else
     {
-        $row=$res->fetch_assoc();
-        $username=$row['username'];
+        while($row=$res->fetch_assoc())
+        {
+        $data[]=$row['username'];
+        $data[]=$row['name'];
+        $data[]=$row['surname'];
+        }
         $connection->close();
-        return $username;
+        return $data;
     }
 }
+
+function seedTableList($name,$type)
+{
+    include_once '../configuration/db.php';
+    include_once 'db.php';
+    $numArgs=func_get_args();
+    foreach($numArgs as $arg) $arg=sanitizeInput($arg);  //sanitizing all inputs
+    $query="INSERT INTO tablelist (tabName,tabType) VALUES ('".$name."','".$type."')";
+    $connection=new mysqli(HOST,USER,PSW,DB);
+    if($res=$connection->query($query))
+    {
+        $response=true;
+    }
+    else $response=false;
+    $connection->close();
+    return $response;
+}
+
+function checkCustomerTable()
+{
+    include_once '../configuration/db.php';
+    include_once 'db.php';
+    $query="SELECT tabName FROM tableList WHERE tabType='customerTable'";
+    $connection=new mysqli(HOST,USER,PSW,DB);
+    $res=$connection->query($query);
+    $count=$res->num_rows;
+    if($count==1) $response=true;
+    else $response=false;
+    return $response;
+}
+
 
 ?>

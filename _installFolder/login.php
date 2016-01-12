@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <?php
 session_start();
-require_once "function/funcs.php";
+require_once "configuration/db.php";
+require_once ROOT.'/function/funcs.php';
 if(checkInstallation())
 {
     echo "

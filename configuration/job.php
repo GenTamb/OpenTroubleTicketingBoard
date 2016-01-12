@@ -1,5 +1,5 @@
 <?php
-require_once "../function/funcs.php";
+include_once "../function/funcs.php";
 
 //setting up DataBase 
 if(isset($_POST['configureDB']))
@@ -69,7 +69,7 @@ else echoResponse('no',"Unable to create config.php!\nCheck your permission on d
 if(isset($_POST['configureAdmin']))
 {
     //requiring the db.php file just created
-    require_once ROOT."/configuration/db.php";
+    include_once "../configuration/db.php";
     $adminUserName=sanitizeInput($_POST['adminUserName']);
     $adminName=sanitizeInput($_POST['adminName']);
     $adminSurName=sanitizeInput($_POST['adminSurName']);
@@ -114,7 +114,7 @@ if(isset($_POST['configureAdmin']))
 if(isset($_POST['configureBoard']))
 {
     
- require_once ROOT."/configuration/db.php";
+ require_once "../configuration/db.php";
  $boardName=sanitizeInput($_POST['boardName']);
  $organizationName=sanitizeInput($_POST['organizationName']);
  
@@ -206,7 +206,7 @@ if(isset($_POST['login']))
    }
 }
 
-//to fix
+
 if(isset($_POST['addingFirstGroupName'])){
     include_once 'db.php';
     include_once '../function/funcs.php';
@@ -233,11 +233,22 @@ if(isset($_POST['addingFirstGroupName'])){
                 {
                     $addingField='ALTER TABLE users ADD groupName varchar(20)';
                     $added=$connection->query($addingField);                   //groupName added to users table
-                    
-                    $queryModifyAdmin="UPDATE users SET groupName='$remoteGroupName' WHERE username='".getAdminUsername()."'";
+                    $data=getAdminData('admin');
+                    $queryModifyAdmin="UPDATE users SET groupName='$remoteGroupName' WHERE username='".$data[0]."'";  //binding first admin to remote group
                     $executeModifyAdmin=$connection->query($queryModifyAdmin);
+                    $seedingFirstGroup="INSERT INTO ".$remoteGroupName." (`username`, `name`, `surname`) VALUES ('".$data[0]."','".$data[1]."','".$data[2]."')"; //setting first admin in the remoteGroup
+                    $seeded=$connection->query($seedingFirstGroup);
+                    $createTableList="CREATE TABLE tablelist
+                                      (tabName varchar(20),
+                                       tabType varchar(20),
+                                       INDEX(tabName(20)),
+                                       PRIMARY KEY(tabName)) Engine InnoDB";
+                    $executeCreateTableList=$connection->query($createTableList);
+                    seedTableList($remoteGroupName,'remoteGroup');
+                    seedTableList('board','services');
+                    seedTableList('users','services');
                     $connection->close();
-                    echoResponse('yes',"Table $remoteGroupName created and other table modified successfully!");
+                    echoResponse('yes',"Table $remoteGroupName and tableList created and other tables modified successfully!");
                 }
                 else
                 {
@@ -255,7 +266,82 @@ if(isset($_POST['addingFirstGroupName'])){
     
 }
 
+if(isset($_POST['addingCTN']))
+{
+    include_once 'db.php';
+    include_once '../function/funcs.php';
+    $CTN=sanitizeInput($_POST['CTN']);
+    $query="CREATE TABLE $CTN
+            (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+             name varchar(20) NOT NULL,
+             surname varchar(30) NOT NULL,
+             type varchar(20),
+             site varchar(20),
+             INDEX (name(20)),
+             INDEX (surname(30))) ENGINE InnoDB";
+    $connection=new mysqli(HOST,USER,PSW,DB);
+    if($execute=$connection->query($query))
+    {
+        seedTableList($CTN,'services');
+        echoResponse('yes',"Table $CTN created successfully");
+    }
+    else echoResponse('no','Something went wrong');
+    $connection->close();
+    
+}
 
+if(isset($_POST['completeSetup']))
+{
+    include_once 'db.php';
+    include_once '../function/funcs.php';
+    $createAssetsTable="CREATE TABLE IF NOT EXISTS assets
+                        (code varchar(20) NOT NULL,
+                         type varchar(20) NOT NULL,
+                         brand varchar(20),
+                         model varchar(20),
+                         site varchar(20),
+                         INDEX(code(20)),
+                         INDEX(brand(20)),
+                         INDEX(model(20)),
+                         PRIMARY KEY(code)) ENGINE InnoDB";
+    $connection=new mysqli(HOST,USER,PSW,DB);
+    if($execQuery=$connection->query($createAssetsTable)) seedTableList('assets','services');
+    else echoResponse('no',$connection->error);
+    $createSitesTable="CREATE TABLE IF NOT EXISTS sites
+                       (name varchar(30),
+                        street varchar(100),
+                        INDEX(name(30)),
+                        INDEX(street(50)),
+                        PRIMARY KEY(name)) ENGINE InnoDB";
+    if($execQuery=$connection->query($createSitesTable)) seedTableList('sites','services');
+    else echoResponse('no',$connection->error);
+    $createMessageTable="CREATE TABLE IF NOT EXISTS messages
+                         (sender varchar(20),
+                          target varchar(20),
+                          body varchar(500),
+                          INDEX(sender(20)),
+                          INDEX(target(20))) ENGINE InnoDB";
+    if($execQuery=$connection->query($createMessageTable)) seedTableList('messages','services');
+    else echoResponse('no',$connection->error);
+    $createSitesTable="CREATE TABLE IF NOT EXISTS tickets
+                       (id int(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        asset varchar(20),
+                        status ENUM('open','working','pause','close'),
+                        customerName varchar(20),
+                        customerSurname varchar(30),
+                        site varchar(20),
+                        openedBy varchar(20),
+                        assignedTo varchar(20),
+                        groupAssigned varchar(20),
+                        description varchar(500),
+                        solution varchar(500),
+                        INDEX(asset(20)),
+                        INDEX(customerSurname(30))) ENGINE InnoDB";
+    if($execQuery=$connection->query($createSitesTable)) seedTableList('tickets','services');
+    else echoResponse('no',$connection->error);
+    echoResponse('yes','Enjoy!');
+    
+}
 //closed if($_SERVER['REQUEST_METHOD']=='POST')
 
 

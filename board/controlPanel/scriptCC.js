@@ -11,13 +11,55 @@ $(document).ready(function(){
                 },
                 function (data) {
                     if (data[0]=='yes') {
-                        alert(data[1]);
                         $("#rcNameForm").addClass('divHidden');
-                        //$("#setupCustomersTable").removeClass('divHidden');
+                        $("#createCustomersTable").removeClass('divHidden');
                     }
+                    alert(data[1]);
                 },
                 "json");
         }
         else alert('Field is empty');
     });
 });
+
+$(document).ready(function(){
+    $("#sendCTN").click(function(event){
+        event.preventDefault();
+        var CTN=$("#customersTableName").val();
+        if (CTN!='')
+        {
+         $.post('configuration/job.php',
+                {
+                    addingCTN:1,
+                    CTN:CTN
+                },
+                function (data) {
+                    if (data[0]=='yes') {
+                        $("#createCustomersTable").addClass('divHidden');
+                        $("#finishSetup").removeClass('divHidden');
+                    }
+                    alert(data[1]);
+                },
+                "json");
+        }
+        else alert('Field is empty');
+    });
+});
+
+
+$(document).ready(function(){
+    $("#completeSetup").click(function(){
+         $.post('configuration/job.php',
+                {
+                    completeSetup:1
+                },
+                function (data) {
+                    if (data[0]=='yes') {
+                        $("#finishSetup").addClass('divHidden');
+                        $("#complete").removeClass('divHidden');
+                    }
+                    alert(data[1]);
+                },
+                "json");
+        });
+    });

@@ -47,8 +47,14 @@ setupUser($user);
         <a href='#' class='dropdown-toggle' data-toggle='dropdown'>New..<b class='caret'></b></a>
         <ul class='dropdown-menu'>
             <li><a href='#'>Ticket</a></li>
+            ";
+            if($user->getPosition()=='admin' || $user->getPosition()=='superuser')
+              {
+                echo "
             <li><a href='#'>Customer</a></li>
-            <li><a href='#'>Asset</a></li>
+            <li><a href='#'>Asset</a></li>";
+              }
+        echo "      
         </ul>
       </li>
       <li class='dropdown'>
