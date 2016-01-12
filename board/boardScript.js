@@ -33,4 +33,54 @@ $(document).ready(function(){
     });
 });
 
+$(document).ready(function(){
+    check_messages();
+    setInterval(function(){ check_messages();}, 120000);
+});
+
+$(document).ready(function(){
+    $("#searchTicket").click(function(e){
+        e.preventDefault();
+        var id=$("#searchTicket").val();
+        if (isNaN(id))
+        {
+            alert(id+' in not a number');
+        }
+        else
+        {
+            $.post('configuration/job.php',
+                   {
+                    searchTKTbyID:1,
+                    id:id
+                   },
+                   function(data)
+                   {
+                    var echoing;
+                    if (data==0)
+                    {
+                        echoing='No tkt found with that id';
+                    }
+                    else
+                    {
+                        echoing=data;
+                    }
+                    $("#pageBody").html(echoing);
+                    
+                   });
+        }
+    });
+});
+
+function check_messages() {
+    $.post('configuration/job.php',
+           {
+            checkMessages:1
+           },
+           function(data)
+           {
+            $("#counterMSG").html(data);
+           }
+          );
+}
+
 

@@ -3,6 +3,7 @@
 require_once ("configuration/db.php");
 require_once (ROOT."/function/funcs.php");
 require_once (ROOT."/configuration/ClassUser.php");
+require_once (ROOT."/configuration/ClassTicket.php");
 session_start();
 checkLogin();
 $user=new User;
@@ -68,19 +69,19 @@ setupUser($user);
     </ul>
     <form class='navbar-form navbar-left' role='search'>
       <div class='form-group'>
-        <input type='text' class='form-control' placeholder='Search Ticket'>
+        <input type='text' class='form-control' placeholder='Search Ticket by ID'>
       </div>
       <button type='submit' id='searchTicket' class='btn btn-default'>Go</button>
     </form>
     <form class='navbar-form navbar-left' role='search'>
       <div class='form-group'>
-        <input type='text' class='form-control' placeholder='Search Customer'>
+        <input type='text' class='form-control' size='30' placeholder='Search Customer by Surname'>
       </div>
       <button type='submit' id='searchCustomer' class='btn btn-default'>Go</button>
     </form>
      <form class='navbar-form navbar-left' role='search'>
       <div class='form-group'>
-        <input type='text' class='form-control' placeholder='Search Asset'>
+        <input type='text' class='form-control' placeholder='Search Asset by Code'>
       </div>
       <button type='submit' id='searchAsset' class='btn btn-default'>Go</button>
     </form>
@@ -103,7 +104,7 @@ setupUser($user);
     <a href='#' class='dropdown-toggle' data-toggle='dropdown'><?php echo $user->getName()." ".$user->getSurname()."";?> <b class='caret'></b></a>
     <ul class='dropdown-menu'>
     <li><a href='#'>Send a message</a></li>
-    <li><a href='#'>Read messages<span class='badge'>X</a></li>
+    <li><a href='#'>Read messages<span class='badge' id='counterMSG'>X</span></a></li>
     <li class='divider'></li>
     <li><a href='#' id='logout'>Logout</a></li>
     </ul>

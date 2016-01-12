@@ -316,34 +316,61 @@ if(isset($_POST['completeSetup']))
     if($execQuery=$connection->query($createSitesTable)) seedTableList('sites','services');
     else echoResponse('no',$connection->error);
     $createMessageTable="CREATE TABLE IF NOT EXISTS messages
-                         (sender varchar(20),
+                         (id int(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                          sender varchar(20),
                           target varchar(20),
-                          body varchar(500),
-                          INDEX(sender(20)),
-                          INDEX(target(20))) ENGINE InnoDB";
+                          body varchar(500)) ENGINE InnoDB";
     if($execQuery=$connection->query($createMessageTable)) seedTableList('messages','services');
     else echoResponse('no',$connection->error);
     $createSitesTable="CREATE TABLE IF NOT EXISTS tickets
                        (id int(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                        asset varchar(20),
-                        status ENUM('open','working','pause','close'),
-                        customerName varchar(20),
-                        customerSurname varchar(30),
-                        site varchar(20),
-                        openedBy varchar(20),
+                        asset varchar(20) NOT NULL,
+                        status ENUM('open','working','pause','close') NOT NULL,
+                        category varchar(50) NOT NULL,
+                        customerName varchar(20) NOT NULL,
+                        customerSurname varchar(30) NOT NULL,
+                        site varchar(20) NOT NULL,
+                        openedBy varchar(20) NOT NULL,
                         assignedTo varchar(20),
                         groupAssigned varchar(20),
                         description varchar(500),
                         solution varchar(500),
+                        openTime varchar(50),
+                        closeTime varchar(50),
                         INDEX(asset(20)),
-                        INDEX(customerSurname(30))) ENGINE InnoDB";
+                        INDEX(customerSurname(30)),
+                        INDEX(category(30))) ENGINE InnoDB";
     if($execQuery=$connection->query($createSitesTable)) seedTableList('tickets','services');
     else echoResponse('no',$connection->error);
     echoResponse('yes','Enjoy!');
     
 }
-//closed if($_SERVER['REQUEST_METHOD']=='POST')
 
+if(isset($_POST['checkMessages']))
+{
+    session_start();
+    include_once '../configuration/db.php';
+    include_once '../function/funcs.php';
+    $connection=new mysqli(HOST,USER,PSW,DB);
+    $query="SELECT * FROM messages WHERE target='".$_SESSION['username']."'";
+    if(!$exec=$connection->query($query)) echo $connection->error;
+    else
+    {
+        $msg=$exec->num_rows;
+        $connection->close();
+        echo $msg;
+    }
+}
+//closed if($_SERVER['REQUEST_METHOD']=='POST')
+if(isset($_POST['searchTKTbyID']))
+{
+    include_once '../configuration/db.php';
+    include_once '../configuration/ClassTicket.php';
+    $token=$_POST['id'];
+    $ticket=new Ticket();
+    if($ticket->getTicketBy($token)) $ticket->printTicketList();
+    else echo 0;
+}
 
 
 
