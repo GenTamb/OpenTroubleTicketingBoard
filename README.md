@@ -31,9 +31,9 @@ What the SETUP does?
 
 
 TO DO:
-1) board's home
+1) board's home    - almost DONE
 2) CRUD for users
-3) CRUD for incidents
+3) CRUD for incidents - DONE
 4) CRUD for tech's group
 5) anything else
 6) ...
