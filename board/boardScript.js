@@ -1,3 +1,17 @@
+//draw asideLeft
+$(document).ready(function(){
+    $.post("board/sideLeft.php",
+           {
+            set:1
+           },
+           function(data)
+           {
+            $("#asideLeft").html(data);
+           }
+          );
+});
+
+//draw control panel in pageBody
 $(document).ready(function(){
     $("#controlPanelButton").click(function(){
         
@@ -18,6 +32,7 @@ $(document).ready(function(){
     });
 });
 
+//logout function
 $(document).ready(function(){
     $("#logout").click(function(){
         $.post('board/logout.php',
@@ -33,18 +48,20 @@ $(document).ready(function(){
     });
 });
 
+//apply function check_messages
 $(document).ready(function(){
     check_messages();
     setInterval(function(){ check_messages();}, 120000);
 });
 
+//search ticket box
 $(document).ready(function(){
     $("#searchTicket").click(function(e){
         e.preventDefault();
-        var id=$("#searchTicket").val();
-        if (isNaN(id))
+        var id=$("#ticketField").val();
+        if (id=='')
         {
-            alert(id+' in not a number');
+            alert('Field is empty');  
         }
         else
         {
@@ -71,6 +88,38 @@ $(document).ready(function(){
     });
 });
 
+//open ticket window
+$(document).ready(function(){
+           $('#pageBody').on('click','.TKTID', function()
+           {
+           var tktID=$(this).text();
+           var url='board/ticketWindow.php?id='+tktID;
+           var wName='Ticket ID:'+tktID;
+           window.open(url,wName, 'width=800, height=360');
+           });
+});
+
+//open new ticket window
+$(document).ready(function(){
+    $("#tktNew").click(function(){
+        var url='board/ticketWindow.php?new='+true;
+        var wName='Creating New Ticket';
+        window.open(url,wName,'width=800, height=360');
+        
+    });
+});
+
+
+
+
+
+
+//enable tooltip
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+});
+
+//function check_messages
 function check_messages() {
     $.post('configuration/job.php',
            {

@@ -2,14 +2,15 @@
 
 class User
 {
-    private $username,$name,$surname,$position;
+    private $username,$name,$surname,$position,$groupName;
 //constructors
     function __construct()
     {
       $this->username='';
       $this->name='';
       $this->surname='';
-      $this->position;
+      $this->position='';
+      $this->group='';
     }
 
     /*function User($username,$name,$surname,$position)
@@ -23,7 +24,7 @@ class User
 //destructor
     function __destruct()
     {
-        unset($this->username,$this->name,$this->surname,$this->position);
+        unset($this->username,$this->name,$this->surname,$this->position,$this->groupName);
     }
     
 //getter
@@ -47,6 +48,11 @@ class User
       return $this->position;
     }
     
+    public function getGroup()
+    {
+        return $this->groupName;
+    }
+    
 //setter
     public function setUsername($username)
     {
@@ -64,7 +70,13 @@ class User
     {
         $this->position=$position;
     }
+    
+    public function setGroup($groupName)
+    {
+        $this->groupName=$groupName;
+    }
 }
+
 /*for further uses
 class Employee extends User
 {

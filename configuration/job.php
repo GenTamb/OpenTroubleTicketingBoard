@@ -94,7 +94,7 @@ if(isset($_POST['configureAdmin']))
     INDEX(username(20)),
     INDEX(name(15)),
     INDEX(surname(15)),
-    PRIMARY KEY (username)) ENGINE InnoDB";
+    PRIMARY KEY (username)) DEFAULT CHARSET=utf8 ENGINE InnoDB";
     if(!$connection->query($createTable))
     {
         echoResponse('no',$connection->error);
@@ -128,7 +128,7 @@ if(isset($_POST['configureBoard']))
  $addBoardTable="CREATE TABLE board
  (boardName varchar(20),
  organizationName varchar(30),
- PRIMARY KEY(boardName)) ENGINE InnoDB";
+ PRIMARY KEY(boardName)) DEFAULT CHARSET=utf8 ENGINE InnoDB";
  
  if(!$connection->query($addBoardTable))
     {
@@ -194,6 +194,7 @@ if(isset($_POST['login']))
            $_SESSION['name']=$res['name'];
            $_SESSION['surname']=$res['surname'];
            $_SESSION['position']=$res['position'];
+           $_SESSION['groupName']=$res['groupName'];
            $answer=array(1,$res['name'],$res['surname']);
            echo json_encode($answer);
        }
@@ -206,7 +207,7 @@ if(isset($_POST['login']))
    }
 }
 
-
+//setup step: adding first group
 if(isset($_POST['addingFirstGroupName'])){
     include_once 'db.php';
     include_once '../function/funcs.php';
@@ -242,7 +243,7 @@ if(isset($_POST['addingFirstGroupName'])){
                                       (tabName varchar(20),
                                        tabType varchar(20),
                                        INDEX(tabName(20)),
-                                       PRIMARY KEY(tabName)) Engine InnoDB";
+                                       PRIMARY KEY(tabName)) DEFAULT CHARSET=utf8 Engine InnoDB";
                     $executeCreateTableList=$connection->query($createTableList);
                     seedTableList($remoteGroupName,'remoteGroup');
                     seedTableList('board','services');
@@ -266,6 +267,7 @@ if(isset($_POST['addingFirstGroupName'])){
     
 }
 
+//setup step: adding customer table
 if(isset($_POST['addingCTN']))
 {
     include_once 'db.php';
@@ -278,7 +280,7 @@ if(isset($_POST['addingCTN']))
              type varchar(20),
              site varchar(20),
              INDEX (name(20)),
-             INDEX (surname(30))) ENGINE InnoDB";
+             INDEX (surname(30))) DEFAULT CHARSET=utf8 ENGINE InnoDB";
     $connection=new mysqli(HOST,USER,PSW,DB);
     if($execute=$connection->query($query))
     {
@@ -290,38 +292,45 @@ if(isset($_POST['addingCTN']))
     
 }
 
+//setup step: complete
 if(isset($_POST['completeSetup']))
 {
     include_once 'db.php';
     include_once '../function/funcs.php';
+    //create table assets
     $createAssetsTable="CREATE TABLE IF NOT EXISTS assets
                         (code varchar(20) NOT NULL,
                          type varchar(20) NOT NULL,
+                         ip varchar(20),
                          brand varchar(20),
                          model varchar(20),
                          site varchar(20),
                          INDEX(code(20)),
                          INDEX(brand(20)),
                          INDEX(model(20)),
-                         PRIMARY KEY(code)) ENGINE InnoDB";
+                         INDEX(ip(20)),
+                         PRIMARY KEY(code)) DEFAULT CHARSET=utf8 ENGINE InnoDB";
     $connection=new mysqli(HOST,USER,PSW,DB);
     if($execQuery=$connection->query($createAssetsTable)) seedTableList('assets','services');
     else echoResponse('no',$connection->error);
+    //create table sites
     $createSitesTable="CREATE TABLE IF NOT EXISTS sites
                        (name varchar(30),
                         street varchar(100),
                         INDEX(name(30)),
                         INDEX(street(50)),
-                        PRIMARY KEY(name)) ENGINE InnoDB";
+                        PRIMARY KEY(name)) DEFAULT CHARSET=utf8 ENGINE InnoDB";
     if($execQuery=$connection->query($createSitesTable)) seedTableList('sites','services');
     else echoResponse('no',$connection->error);
+    //create table messages
     $createMessageTable="CREATE TABLE IF NOT EXISTS messages
                          (id int(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                           sender varchar(20),
                           target varchar(20),
-                          body varchar(500)) ENGINE InnoDB";
+                          body varchar(500)) DEFAULT CHARSET=utf8 ENGINE InnoDB";
     if($execQuery=$connection->query($createMessageTable)) seedTableList('messages','services');
     else echoResponse('no',$connection->error);
+    //create table tickets
     $createSitesTable="CREATE TABLE IF NOT EXISTS tickets
                        (id int(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                         asset varchar(20) NOT NULL,
@@ -335,17 +344,18 @@ if(isset($_POST['completeSetup']))
                         groupAssigned varchar(20),
                         description varchar(500),
                         solution varchar(500),
-                        openTime varchar(50),
-                        closeTime varchar(50),
+                        openTime varchar(100),
+                        closeTime varchar(100),
                         INDEX(asset(20)),
                         INDEX(customerSurname(30)),
-                        INDEX(category(30))) ENGINE InnoDB";
+                        INDEX(category(30))) DEFAULT CHARSET=utf8 ENGINE InnoDB";
     if($execQuery=$connection->query($createSitesTable)) seedTableList('tickets','services');
     else echoResponse('no',$connection->error);
     echoResponse('yes','Enjoy!');
     
 }
 
+//function: looking for new messages
 if(isset($_POST['checkMessages']))
 {
     session_start();
@@ -361,15 +371,64 @@ if(isset($_POST['checkMessages']))
         echo $msg;
     }
 }
-//closed if($_SERVER['REQUEST_METHOD']=='POST')
+
+//function: searching tkt - test function, not in use - substitute by method function in ticket class
 if(isset($_POST['searchTKTbyID']))
 {
     include_once '../configuration/db.php';
     include_once '../configuration/ClassTicket.php';
     $token=$_POST['id'];
     $ticket=new Ticket();
-    if($ticket->getTicketBy($token)) $ticket->printTicketList();
+    if($ticket->getTicketBy($token)) $ticket->printTabledTicketList();
     else echo 0;
+}
+
+//function: update tkt
+
+if(isset($_POST['updateTKT']))
+{
+    include_once '../configuration/db.php';
+    include_once '../function/funcs.php';
+    include_once '../configuration/ClassTicket.php';
+    include_once '../configuration/ClassUser.php';
+    $id=$_POST['id'];
+    $asset=sanitizeInput($_POST['asset']);
+    $category=sanitizeInput($_POST['category']);
+    $status=sanitizeInput($_POST['status']);
+    $assignedTo=sanitizeInput($_POST['assignedTo']);
+    $groupAssigned=sanitizeInput($_POST['group']);
+    $closeTime=sanitizeInput($_POST['closeTime']);
+    $description=sanitizeInput($_POST['description']);
+    $solution=sanitizeInput($_POST['solution']);
+    $ticket=new Ticket;
+    $msg=$ticket->updateTicket($id,$asset,$status,$category,$assignedTo,$groupAssigned,$description,$solution,$closeTime);
+    echo $msg;
+    
+}
+
+//function: create tkt
+
+if(isset($_POST['createTKT']))
+{
+    include_once '../configuration/db.php';
+    include_once '../function/funcs.php';
+    include_once '../configuration/ClassTicket.php';
+    include_once '../configuration/ClassUser.php';
+    $asset=sanitizeInput($_POST['asset']);
+    $category=sanitizeInput($_POST['category']);
+    $status=sanitizeInput($_POST['status']);
+    $customerName=sanitizeInput($_POST['customerName']);
+    $customerSurname=sanitizeInput($_POST['customerSurname']);
+    $openedBy=sanitizeInput($_POST['openedBy']);
+    $assignedTo=sanitizeInput($_POST['assignedTo']);
+    $groupAssigned=sanitizeInput($_POST['group']);
+    $openTime=sanitizeInput($_POST['openTime']);
+    $description=sanitizeInput($_POST['description']);
+    
+    $ticket=new Ticket;
+    $msg=$ticket->createTicket($asset,$status,$category,$customerName,$customerSurname,$openedBy,$assignedTo,$groupAssigned,$description,$openTime);
+    if(is_numeric($msg)) echoResponse('yes',$msg);
+    else echoResponse('no',$msg);
 }
 
 

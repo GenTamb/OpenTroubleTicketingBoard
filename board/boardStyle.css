@@ -1,3 +1,14 @@
+@media (max-width: 767px) {
+ #asideLeft{
+        border: none;
+    }
+}
+@media (min-width:768px){
+    #asideLeft{
+    border-right: 1px solid black;   
+    }
+}
+
 .divHidden{
     display:none;
 }
@@ -11,3 +22,6 @@
 .btn{
     margin: 10px;
 }
+
+
+

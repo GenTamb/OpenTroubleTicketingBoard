@@ -1,6 +1,8 @@
 <?php
 include_once 'configuration/db.php';
 include_once 'db.php';
+include_once '../configuration/db.php';
+
 
 class Ticket
 {
@@ -68,6 +70,7 @@ class Ticket
             }
             $response=true;
         }
+        $connection->close();
         return $response;
     }
     
@@ -103,6 +106,84 @@ class Ticket
             echo "</ul>";
             $response=true;
         }
+        return $response;
+    }
+    public function printTabledTicketList()
+    {
+        if($this->number==0)
+        {
+            $response=false;
+        }
+        else
+        {
+            $counter=0;
+            echo "<div id='tktResume' class='table-responsive'>
+                   <table class='table'>
+                     <thead>
+                         <tr>
+                         <th>ID</th><th>ASSET</th><th>STATUS</th><th>CATEGORY</th>
+                         </tr>
+                     </thead>
+                     <tbody>";
+            while($counter<$this->number)
+            {
+                echo "<tr>";
+                echo "<td><a class='TKTID' id='ticketId' href='#".$this->id[$counter]."'>".$this->id[$counter]."</a></td>";
+                echo "<td><a class='TKTASSET' id='ticketAsset' href='#".$this->asset[$counter]."'>".$this->asset[$counter]."</a></td>";
+                echo "<td>".$this->status[$counter]."</td>";
+                echo "<td>".$this->category[$counter]."</td>";
+                echo "</tr>";
+                $counter++;
+            }
+            echo "</tbody>
+                  </table>
+                  </div>";
+            $response=true;
+        }
+        return $response;
+    }
+    
+    
+    public function updateTicket($id,$asset,$status,$category,$assignedTo,$groupAssigned,$description,$solution,$closeTime)
+    {
+        $this->id=$id;
+        $this->asset=$asset;
+        $this->status=$status;
+        $this->category=$category;
+        $this->assignedTo=$assignedTo;
+        $this->groupAssigned=$groupAssigned;
+        $this->description=$description;
+        $this->solution=$solution;
+        $this->closeTime=$closeTime;
+        $connection=new mysqli(HOST,USER,PSW,DB);
+        $query="UPDATE tickets SET asset='".$this->asset."',status='".$this->status."',assignedTo='".$this->assignedTo."',
+                groupAssigned='".$this->groupAssigned."',description='".$this->description."',solution='".$this->solution."',
+                closeTime='".$this->closeTime."',category='".$this->category."' WHERE id='".$this->id."'";
+        if(!$exec=$connection->query($query)) $response=$connection->error;
+        else $response="Ticket Updated";
+        $connection->close();
+        return $response;
+    }
+    
+    public function createTicket($asset,$status,$category,$customerName,$customerSurname,$openedBy,$assignedTo,$groupAssigned,$description,$openTime)
+    {
+        $this->asset=$asset;
+        $this->status=$status;
+        $this->category=$category;
+        $this->customerName=$customerName;
+        $this->customerSurname=$customerSurname;
+        $this->openedBy=$openedBy;
+        $this->assignedTo=$assignedTo;
+        $this->groupAssigned=$groupAssigned;
+        $this->description=$description;
+        $this->opentTime=$openTime;
+        $connection=new mysqli(HOST,USER,PSW,DB);
+        $query="INSERT INTO tickets (asset,status,category,customerName,customerSurname,openedBy,assignedTo,groupAssigned,description,openTime)
+                VALUES ('".$this->asset."','".$this->status."','".$this->category."','".$this->customerName."','".$this->customerSurname."',
+                '".$this->openedBy."','".$this->assignedTo."','".$this->groupAssigned."','".$this->description."','".$this->opentTime."')";
+        if(!$exec=$connection->query($query)) $response=$connection->error;
+        else $response=$connection->insert_id;
+        $connection->close();
         return $response;
     }
 }

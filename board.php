@@ -47,7 +47,7 @@ setupUser($user);
       <li class='dropdown'>
         <a href='#' class='dropdown-toggle' data-toggle='dropdown'>New..<b class='caret'></b></a>
         <ul class='dropdown-menu'>
-            <li><a href='#'>Ticket</a></li>
+            <li><a href='#' id='tktNew'>Ticket</a></li>
             ";
             if($user->getPosition()=='admin' || $user->getPosition()=='superuser')
               {
@@ -69,19 +69,19 @@ setupUser($user);
     </ul>
     <form class='navbar-form navbar-left' role='search'>
       <div class='form-group'>
-        <input type='text' class='form-control' placeholder='Search Ticket by ID'>
+        <input type='text' class='form-control' data-toggle='tooltip' data-placement='bottom' title='You can use any parameter to search a ticket' id='ticketField' placeholder='Search Ticket'>
       </div>
       <button type='submit' id='searchTicket' class='btn btn-default'>Go</button>
     </form>
     <form class='navbar-form navbar-left' role='search'>
       <div class='form-group'>
-        <input type='text' class='form-control' size='30' placeholder='Search Customer by Surname'>
+        <input type='text' class='form-control' data-toggle='tooltip' data-placement='bottom' title='You can use any parameter to search a customer' id='customerField' placeholder='Search Customer'>
       </div>
       <button type='submit' id='searchCustomer' class='btn btn-default'>Go</button>
     </form>
      <form class='navbar-form navbar-left' role='search'>
       <div class='form-group'>
-        <input type='text' class='form-control' placeholder='Search Asset by Code'>
+        <input type='text' class='form-control'data-toggle='tooltip' data-placement='bottom' title='You can use any parameter to search an asset' id='assetField' placeholder='Search Asset'>
       </div>
       <button type='submit' id='searchAsset' class='btn btn-default'>Go</button>
     </form>
@@ -113,7 +113,12 @@ setupUser($user);
     
   </div><!-- /.navbar-collapse -->
 </nav>
-<div id='pageBody' class='container'></div>
+<div class='container-fluid'>
+  <div class='row'>
+    <div id='asideLeft' class='col-sm-6 col-lg-3'></div>
+    <div id='pageBody' class='col-sm-6 col-lg-9'></div>
+  </div>
+</div>
 <div class='modal'></div>
 </body>
 </html>

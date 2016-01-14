@@ -113,6 +113,7 @@ function setupUser($user)
     $user->setName($_SESSION['name']);
     $user->setSurname($_SESSION['surname']);
     $user->setPosition($_SESSION['position']);
+    $user->setGroup($_SESSION['groupName']);
 }
 
 //check first setup
