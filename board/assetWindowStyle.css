@@ -1,0 +1,23 @@
+.disabled{
+    background: white;
+    border: 1px solid black;
+}
+.openedBy{
+    background: white;
+    border: none;
+}
+
+.time{
+    background: white;
+    border: none;
+}
+.activated{
+    background: yellow;
+    border: 1px solid black;
+}
+.space{
+    padding:5px;
+}
+#editASSET{
+    width:50px;
+}

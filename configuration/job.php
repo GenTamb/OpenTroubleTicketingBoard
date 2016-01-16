@@ -156,6 +156,8 @@ if(isset($_POST['finishSetup']))
     {
         unlink('../setup.php');
         rename('../_installFolder/login.php','../login.php');
+        rename('../_installFolder/setupScript.js','setupScript.js');
+        rename('../_installFolder/setupScript.css','setupScript.css');
         echoResponse('yes',"Yes! We did it!\nEnjoy your board!");
     }
    }
@@ -279,12 +281,13 @@ if(isset($_POST['addingCTN']))
              surname varchar(30) NOT NULL,
              type varchar(20),
              site varchar(20),
+             status ENUM('active','de-active'),
              INDEX (name(20)),
              INDEX (surname(30))) DEFAULT CHARSET=utf8 ENGINE InnoDB";
     $connection=new mysqli(HOST,USER,PSW,DB);
     if($execute=$connection->query($query))
     {
-        seedTableList($CTN,'services');
+        seedTableList($CTN,'customersTable');
         echoResponse('yes',"Table $CTN created successfully");
     }
     else echoResponse('no','Something went wrong');
@@ -372,14 +375,59 @@ if(isset($_POST['checkMessages']))
     }
 }
 
-//function: searching tkt - test function, not in use - substitute by method function in ticket class
-if(isset($_POST['searchTKTbyID']))
+//function: looking for new assigned tickets
+if(isset($_POST['checkPQueue']))
+{
+    session_start();
+    include_once '../configuration/db.php';
+    include_once '../function/funcs.php';
+    include_once '../configuration/ClassTicket.php';
+    include_once '../configuration/ClassUser.php';
+    $connection=new mysqli(HOST,USER,PSW,DB);
+    $query="SELECT * FROM tickets WHERE assignedTo='".$_SESSION['surname'].",".$_SESSION['name']."' AND status<>'close'";
+    if(!$exec=$connection->query($query)) echo $connection->error;
+    else
+    {
+        $msg=$exec->num_rows;
+        $connection->close();
+        echo $msg;
+    }
+}
+
+//function: list assigned tickets
+if(isset($_POST['listPersonalQueue']))
+{
+    session_start();
+    include_once 'db.php';
+    include_once 'ClassTicket.php';
+    
+    $name=$_SESSION['name'];
+    $surname=$_SESSION['surname'];
+    $assignedTo=$surname.",".$name;
+    $ticket=new Ticket();
+    if($ticket->getTicketBy($assignedTo)) $ticket->printTabledTicketList('open');
+    else echo "No Tickets in personal queue";
+}
+
+//function: search tkt 
+if(isset($_POST['searchTKTbyTOKEN']))
 {
     include_once '../configuration/db.php';
     include_once '../configuration/ClassTicket.php';
-    $token=$_POST['id'];
+    $token=$_POST['token'];
     $ticket=new Ticket();
-    if($ticket->getTicketBy($token)) $ticket->printTabledTicketList();
+    if($ticket->getTicketBy($token)) $ticket->printTabledTicketList('all');
+    else echo 0;
+}
+
+//function: search customer
+if(isset($_POST['searchCUSTOMERbyTOKEN']))
+{
+    include_once '../configuration/db.php';
+    include_once '../configuration/ClassCustomer.php';
+    $token=$_POST['token'];
+    $customer=new Customer();
+    if($customer->getCustomerBy($token)) $customer->printTabledCustomerList('active');
     else echo 0;
 }
 
@@ -390,7 +438,7 @@ if(isset($_POST['updateTKT']))
     include_once '../configuration/db.php';
     include_once '../function/funcs.php';
     include_once '../configuration/ClassTicket.php';
-    include_once '../configuration/ClassUser.php';
+
     $id=$_POST['id'];
     $asset=sanitizeInput($_POST['asset']);
     $category=sanitizeInput($_POST['category']);
@@ -406,6 +454,51 @@ if(isset($_POST['updateTKT']))
     
 }
 
+//function : update customer
+
+if(isset($_POST['updateCUST']))
+{
+    include_once '../configuration/db.php';
+    include_once '../function/funcs.php';
+    include_once '../configuration/ClassCustomer.php';
+
+    $id=$_POST['customerID'];
+    $customerName=sanitizeInput($_POST['customerName']);
+    $customerSurname=sanitizeInput($_POST['customerSurname']);
+    $customerType=sanitizeInput($_POST['customerType']);
+    $customerSite=sanitizeInput($_POST['customerSite']);
+    $customerStatus=sanitizeInput($_POST['customerStatus']);
+    
+    $customer=new Customer;
+ 
+    $msg=$customer->updateCustomer($id,$customerName,$customerSurname,$customerType,$customerSite,$customerStatus);
+    echo $msg;
+    
+}
+
+
+//function: create customer
+
+if(isset($_POST['createCUSTOMER']))
+{
+    include_once '../configuration/db.php';
+    include_once '../function/funcs.php';
+    include_once '../configuration/ClassCustomer.php';
+    
+    $customerSurname=sanitizeInput($_POST['customerSurname']);
+    $customerName=sanitizeInput($_POST['customerName']);
+    $customerType=sanitizeInput($_POST['customerType']);
+    $customerSite=sanitizeInput($_POST['customerSite']);
+    $customerStatus=sanitizeInput($_POST['customerStatus']);
+    
+    
+    $customer=new Customer;
+    $msg=$customer->createCustomer($customerSurname,$customerName,$customerType,$customerSite,$customerStatus);
+    if(is_numeric($msg)) echoResponse('yes',$msg);
+    else echoResponse('no',$msg);
+
+}
+
 //function: create tkt
 
 if(isset($_POST['createTKT']))
@@ -413,7 +506,7 @@ if(isset($_POST['createTKT']))
     include_once '../configuration/db.php';
     include_once '../function/funcs.php';
     include_once '../configuration/ClassTicket.php';
-    include_once '../configuration/ClassUser.php';
+
     $asset=sanitizeInput($_POST['asset']);
     $category=sanitizeInput($_POST['category']);
     $status=sanitizeInput($_POST['status']);
@@ -430,6 +523,7 @@ if(isset($_POST['createTKT']))
     if(is_numeric($msg)) echoResponse('yes',$msg);
     else echoResponse('no',$msg);
 }
+
 
 
 

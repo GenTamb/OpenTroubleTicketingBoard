@@ -54,12 +54,18 @@ $(document).ready(function(){
     setInterval(function(){ check_messages();}, 120000);
 });
 
+//apply function check_personal_queue
+$(document).ready(function(){
+    check_personal_queue();
+    setInterval(function(){ check_personal_queue();},100000);
+});
+
 //search ticket box
 $(document).ready(function(){
     $("#searchTicket").click(function(e){
         e.preventDefault();
-        var id=$("#ticketField").val();
-        if (id=='')
+        var token=$("#ticketField").val();
+        if (token=='')
         {
             alert('Field is empty');  
         }
@@ -67,15 +73,15 @@ $(document).ready(function(){
         {
             $.post('configuration/job.php',
                    {
-                    searchTKTbyID:1,
-                    id:id
+                    searchTKTbyTOKEN:1,
+                    token:token
                    },
                    function(data)
                    {
                     var echoing;
                     if (data==0)
                     {
-                        echoing='No tkt found with that id';
+                        echoing='No TKT found with that token';
                     }
                     else
                     {
@@ -86,6 +92,51 @@ $(document).ready(function(){
                    });
         }
     });
+});
+
+//search customer box
+$(document).ready(function(){
+    $("#searchCustomer").click(function(e){
+        e.preventDefault();
+        var token=$("#customerField").val();
+        if (token=='')
+        {
+            alert('Field is empty');  
+        }
+        else
+        {
+            $.post('configuration/job.php',
+                   {
+                    searchCUSTOMERbyTOKEN:1,
+                    token:token
+                   },
+                   function(data)
+                   {
+                    var echoing;
+                    if (data==0)
+                    {
+                        echoing='No Customer found with that token';
+                    }
+                    else
+                    {
+                        echoing=data;
+                    }
+                    $("#pageBody").html(echoing);
+                    
+                   });
+        }
+    });
+});
+
+//open customer window
+$(document).ready(function(){
+           $('#pageBody').on('click','.CUSTOMERID', function()
+           {
+           var customerID=$(this).text();
+           var url='board/customerWindow.php?id='+customerID;
+           var wName='Customer ID:'+customerID;
+           window.open(url,wName, 'width=800, height=360');
+           });
 });
 
 //open ticket window
@@ -99,6 +150,16 @@ $(document).ready(function(){
            });
 });
 
+//open new customer window
+$(document).ready(function(){
+    $("#customerNew").click(function(){
+        var url='board/customerWindow.php?new='+true;
+        var wName='Creating New Customer';
+        window.open(url,wName,'width=800, height=360');
+        
+    });
+});
+
 //open new ticket window
 $(document).ready(function(){
     $("#tktNew").click(function(){
@@ -109,15 +170,45 @@ $(document).ready(function(){
     });
 });
 
-
-
+//open personal queue
+$(document).ready(function(){
+    $("#asideLeft").on('click','#personalQueue',function(){
+        $.post('configuration/job.php',
+               {
+                listPersonalQueue:1
+               },
+               function(data)
+               {
+                $("#pageBody").html(data);
+               });
+      
+    });
+});
 
 
 
 //enable tooltip
 $(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip();   
+    $('[data-toggle="tooltip"]').tooltip();
+    $('#asideLeft').on('mouseover','[data-toggle="tooltip"]',function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 });
+
+
+//function check_personal_queue
+function check_personal_queue(){
+    $.post('configuration/job.php',
+           {
+            checkPQueue:1
+           },
+           function(data)
+           {
+            $("#personalQueueNumber").html(data);
+           }
+          );
+}
+
 
 //function check_messages
 function check_messages() {

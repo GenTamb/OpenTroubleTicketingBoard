@@ -3,7 +3,7 @@ session_start();
 include_once '../configuration/db.php';
 include_once '../configuration/ClassUser.php';
 include_once '../configuration/ClassTicket.php';
-include_once '../configuration/Ticket.php';
+
 include_once '../function/funcs.php';
    
    
@@ -17,8 +17,8 @@ $ticket=new Ticket();
 //get input id
 if(isset($_GET['id']))
 {
-   $id=$_GET['id'];
-   $ticket->getTicketBy($id);
+   $token=$_GET['id'];
+   $ticket->getTicketBy($token);
 }
    
    //checking group afference
@@ -34,11 +34,11 @@ if(isset($_GET['id']))
        <meta name='viewport' content='width=device-width, initial-scale=1'>
        <link rel='icon' href='icon/icon.png'/>
        <link rel='stylesheet' href='../style/bootstrap.min.css'>
-       <link rel='stylesheet' href='ticketWindowsStyle.css'>
+       <link rel='stylesheet' href='ticketWindowStyle.css'>
        <link rel='stylesheet' href='../style/defaultStyle.css'>
        <script src='../js/jquery.min.js'></script>
        <script src='../js/bootstrap.min.js'></script>
-       <script src='ticketWindowsScript.js'></script>
+       <script src='ticketWindowScript.js'></script>
        <script src='../js/defaultScript.js'></script>
        </head>
        <body>

@@ -52,18 +52,19 @@ setupUser($user);
             if($user->getPosition()=='admin' || $user->getPosition()=='superuser')
               {
                 echo "
-            <li><a href='#'>Customer</a></li>
+            <li><a href='#' id='customerNew'>Customer</a></li>
             <li><a href='#'>Asset</a></li>";
               }
         echo "      
         </ul>
       </li>
       <li class='dropdown'>
-        <a href='#' class='dropdown-toggle' data-toggle='dropdown'>List All<b class='caret'></b></a>
+        <a href='#' class='dropdown-toggle' data-toggle='dropdown'>List Custom<b class='caret'></b></a>
         <ul class='dropdown-menu'>
-          <li><a href='#'>Tickets</a></li>
-          <li><a href='#'>Customers</a></li>
-          <li><a href='#'>Assets</a></li>
+          <li><a href='#'>list</a></li>
+          <li><a href='#'>something</a></li>
+          <li><a href='#'>custom</a></li>
+          <li><a href='#'>TO DO</a></li>
         </ul>
       </li>
     </ul>

@@ -108,7 +108,8 @@ class Ticket
         }
         return $response;
     }
-    public function printTabledTicketList()
+    
+    /*public function printTabledTicketList()
     {
         if($this->number==0)
         {
@@ -121,7 +122,7 @@ class Ticket
                    <table class='table'>
                      <thead>
                          <tr>
-                         <th>ID</th><th>ASSET</th><th>STATUS</th><th>CATEGORY</th>
+                         <th>ID</th><th>ASSET</th><th>STATUS</th><th>CATEGORY</th><th>OPENED BY</th><th>ASSIGNED TO</th>
                          </tr>
                      </thead>
                      <tbody>";
@@ -132,6 +133,8 @@ class Ticket
                 echo "<td><a class='TKTASSET' id='ticketAsset' href='#".$this->asset[$counter]."'>".$this->asset[$counter]."</a></td>";
                 echo "<td>".$this->status[$counter]."</td>";
                 echo "<td>".$this->category[$counter]."</td>";
+                echo "<td><a class='TKTOPENEDBY' id='ticketOpenedBy' href='#".$this->openedBy[$counter]."'>".$this->openedBy[$counter]."</a></td>";
+                echo "<td><a class='TKTASSIGNEDTO' id='ticketAssignedTo' href='#".$this->assignedTo[$counter]."'>".$this->assignedTo[$counter]."</a></td>";
                 echo "</tr>";
                 $counter++;
             }
@@ -141,8 +144,112 @@ class Ticket
             $response=true;
         }
         return $response;
-    }
+    }*/
     
+    /*public function printNotClosedTabledTicketList()
+    {
+        if($this->number==0)
+        {
+            $response=false;
+        }
+        else
+        {
+            $counter=0;
+            echo "<div id='tktResume' class='table-responsive'>
+                   <table class='table'>
+                     <thead>
+                         <tr>
+                         <th>ID</th><th>ASSET</th><th>STATUS</th><th>CATEGORY</th><th>OPENED BY</th><th>ASSIGNED TO</th>
+                         </tr>
+                     </thead>
+                     <tbody>";
+            while($counter<$this->number)
+            {
+                if($this->status[$counter]!='close')
+                {
+                   echo "<tr>";
+                   echo "<td><a class='TKTID' id='ticketId' href='#".$this->id[$counter]."'>".$this->id[$counter]."</a></td>";
+                   echo "<td><a class='TKTASSET' id='ticketAsset' href='#".$this->asset[$counter]."'>".$this->asset[$counter]."</a></td>";
+                   echo "<td>".$this->status[$counter]."</td>";
+                   echo "<td>".$this->category[$counter]."</td>";
+                   echo "<td><a class='TKTOPENEDBY' id='ticketOpenedBy' href='#".$this->openedBy[$counter]."'>".$this->openedBy[$counter]."</a></td>";
+                   echo "<td><a class='TKTASSIGNEDTO' id='ticketAssignedTo' href='#".$this->assignedTo[$counter]."'>".$this->assignedTo[$counter]."</a></td>";
+                   echo "</tr>";
+                   $counter++;
+                }
+                else $counter++;
+                
+            }
+            echo "</tbody>
+                  </table>
+                  </div>";
+            $response=true;
+        }
+        return $response;
+    }*/
+    
+    public function printTabledTicketList($token)
+    {
+        if($this->number==0)
+        {
+            $response=false;
+        }
+        else
+        {
+            $counter=0;
+            echo "<div id='tktResume' class='table-responsive'>
+                   <table class='table'>
+                     <thead>
+                         <tr>
+                         <th>ID</th><th>ASSET</th><th>STATUS</th><th>CATEGORY</th><th>OPENED BY</th><th>ASSIGNED TO</th>
+                         </tr>
+                     </thead>
+                     <tbody>";
+            switch ($token)
+            {
+                case 'all':
+                           while($counter<$this->number)
+                           {
+                           echo "<tr>";
+                           echo "<td><a class='TKTID' id='ticketId' href='#".$this->id[$counter]."'>".$this->id[$counter]."</a></td>";
+                           echo "<td><a class='TKTASSET' id='ticketAsset' href='#".$this->asset[$counter]."'>".$this->asset[$counter]."</a></td>";
+                           echo "<td>".$this->status[$counter]."</td>";
+                           echo "<td>".$this->category[$counter]."</td>";
+                           echo "<td><a class='TKTOPENEDBY' id='ticketOpenedBy' href='#".$this->openedBy[$counter]."'>".$this->openedBy[$counter]."</a></td>";
+                           echo "<td><a class='TKTASSIGNEDTO' id='ticketAssignedTo' href='#".$this->assignedTo[$counter]."'>".$this->assignedTo[$counter]."</a></td>";
+                           echo "</tr>";
+                           $counter++;
+                           }
+                           break;
+                case 'open':
+                           while($counter<$this->number)
+                           { 
+                              if($this->status[$counter]!='close')
+                              {
+                              echo "<tr>";
+                              echo "<td><a class='TKTID' id='ticketId' href='#".$this->id[$counter]."'>".$this->id[$counter]."</a></td>";
+                              echo "<td><a class='TKTASSET' id='ticketAsset' href='#".$this->asset[$counter]."'>".$this->asset[$counter]."</a></td>";
+                              echo "<td>".$this->status[$counter]."</td>";
+                              echo "<td>".$this->category[$counter]."</td>";
+                              echo "<td><a class='TKTOPENEDBY' id='ticketOpenedBy' href='#".$this->openedBy[$counter]."'>".$this->openedBy[$counter]."</a></td>";
+                              echo "<td><a class='TKTASSIGNEDTO' id='ticketAssignedTo' href='#".$this->assignedTo[$counter]."'>".$this->assignedTo[$counter]."</a></td>";
+                              echo "</tr>";
+                              $counter++;
+                              }
+                              else $counter++;  
+                            }
+                            break;
+                default:
+                            break;
+            }
+            echo "</tbody>
+                  </table>
+                  </div>";
+            $response=true;
+        }
+        return $response;
+    }
+        
     
     public function updateTicket($id,$asset,$status,$category,$assignedTo,$groupAssigned,$description,$solution,$closeTime)
     {

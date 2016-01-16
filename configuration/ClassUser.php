@@ -77,11 +77,5 @@ class User
     }
 }
 
-/*for further uses
-class Employee extends User
-{
-    
-}
-*/
 
 ?>
