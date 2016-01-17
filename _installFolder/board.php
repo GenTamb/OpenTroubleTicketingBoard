@@ -53,7 +53,7 @@ setupUser($user);
               {
                 echo "
             <li><a href='#' id='customerNew'>Customer</a></li>
-            <li><a href='#'>Asset</a></li>";
+            <li><a href='#' id='assetNew'>Asset</a></li>";
               }
         echo "      
         </ul>

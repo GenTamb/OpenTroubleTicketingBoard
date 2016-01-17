@@ -1,6 +1,6 @@
 //disable all fields
 $(document).ready(function(){
-    if ($("#customerID").text()!='new')
+    if ($("#assetCODE").text()!='')
     {
          $(".disabled").prop("disabled",true);    
     }
@@ -14,15 +14,16 @@ $(document).ready(function(){
 
 //manage the edit button
 $(document).ready(function(){
-        var customerID=$("#customerID").text();
-        var customerSurname=$("#customerSurname").val();
-        var customerName=$("#customerName").val();
-        var customerType=$("#customerType").val();
-        var customerSite=$("#customerSite").val();
-        var customerStatus=$("#customerStatus").val();
-    $("#editCUST").on('click',function(){
+        var assetCode=$("#assetCODE").val();
+        var assetType=$("#assetType").val();
+        var assetModel=$("#assetModel").val();
+        var assetBrand=$("#assetBrand").val();
+        var assetSite=$("#assetSite").val();
+        var assetStatus=$("#assetStatus").val();
+        var assetIp=$("#assetIp").val();
+    $("#editASSET").on('click',function(){
         
-    if($("#editCUST").text()=='Edit')
+    if($("#editASSET").text()=='Edit')
     {
         
         $(".editable").prop("disabled",false);
@@ -33,25 +34,28 @@ $(document).ready(function(){
     else
     {
         //acquiring datas
-        
-        var customerSurnamemod=$("#customerSurname").val();
-        var customerNamemod=$("#customerName").val();
-        var customerTypemod=$("#customerType").val();
-        var customerSitemod=$("#customerSite").val();
-        var customerStatusmod=$("#customerStatus").val();
+        var assetCodeMOD=$("#assetCODE").val();
+        var assetTypeMOD=$("#assetType").val();
+        var assetModelMOD=$("#assetModel").val();
+        var assetBrandMOD=$("#assetBrand").val();
+        var assetSiteMOD=$("#assetSite").val();
+        var assetStatusMOD=$("#assetStatus").val();
+        var assetIpMOD=$("#assetIp").val();
         //posting data
         
-        if(customerSurname!=customerSurnamemod ||customerName!=customerNamemod || customerType!=customerTypemod || customerSite!=customerTypemod || customerStatus!=customerStatusmod)
+        if(assetCode!=assetCodeMOD ||assetType!=assetTypeMOD ||assetModel!=assetModelMOD || assetBrand!=assetBrandMOD || assetSite!=assetSiteMOD || assetStatus!=assetStatusMOD || assetIp!=assetIpMOD)
         {
             $.post('../configuration/job.php',
                {
-                updateCUST:1,
-                customerID:customerID,
-                customerName:customerNamemod,
-                customerSurname:customerSurnamemod,
-                customerType:customerTypemod,
-                customerSite:customerTypemod,
-                customerStatus:customerStatusmod,
+                updateASSET:1,
+                originalAssetCode:assetCode,
+                assetCode:assetCodeMOD,
+                assetType:assetTypeMOD,
+                assetModel:assetModelMOD,
+                assetBrand:assetBrandMOD,
+                assetSite:assetSiteMOD,
+                assetStatus:assetStatusMOD,
+                assetIp:assetIpMOD,
                 
                },
                function(data)
@@ -59,7 +63,7 @@ $(document).ready(function(){
                 alert(data);
                });
         }
-        else alert('Customer was not modified');
+        else alert('Asset was not modified');
         
         $(".editable").prop("disabled",true);
         $(".editable").removeClass("activated");
@@ -71,30 +75,29 @@ $(document).ready(function(){
 
 //manage create button
 $(document).ready(function(){
-   $("#createCUST").click(function(){
+   $("#createASSET").click(function(){
     //acquire datas
-    var customerSurname=$("#customerSurname").val();
-    var customerName=$("#customerName").val();
-    var customerType=$("#customerType").val();
-    var customerSite=$("#customerSite").val();
-    var customerStatus=$("#customerStatus").val();
+    var assetCode=$("#assetCODE").val();
+    var assetType=$("#assetType").val();
+    var assetModel=$("#assetModel").val();
+    var assetBrand=$("#assetBrand").val();
+    var assetSite=$("#assetSite").val();
+    var assetIp=$("#assetIp").val();
     
     //checking inputs
     var token='';
     var go=true;
     switch (token)
     {
-        case customerSurname:
-                                alert('Customer\'s name is empty!');
+        case assetCode:
+                                alert('Asset\'s code is empty!');
+                                break;
+        case assetType:
+                                alert('Asset\'s type is empty!');
                                 go=false;
                                 break;
-        case customerName:
-                                alert('Customer\'s surname is empty!');
-                                go=false;
-                                break;
-        case customerType:
-                                alert('Type is empty!');
-                                go=false;
+        case assetSite:
+                                alert('Site is empty!');
                                 break;
         default:
                                 go=true;
@@ -105,21 +108,22 @@ $(document).ready(function(){
     {
         $.post('../configuration/job.php',
            {
-            createCUSTOMER:1,
-            customerSurname:customerSurname,
-            customerName:customerName,
-            customerType:customerType,
-            customerSite:customerSite,
-            customerStatus:customerStatus
+            createASSET:1,
+            assetCode:assetCode,
+            assetType:assetType,
+            assetModel:assetModel,
+            assetBrand:assetBrand,
+            assetSite:assetSite,
+            assetIp:assetIp
            },
            function(data)
            {
             if (data[0]=='yes')
             {
-                alert('Created Customer: '+data[1]);
-                var custID=data[1];
-                var url='customerWindow.php?id='+custID;
-                var wName='Customer ID:'+custID;
+                alert('Created Asset: '+data[1]);
+                var assCODE=data[1];
+                var url='assetWindow.php?id='+assCODE;
+                var wName='ASSET ID:'+assCODE;
                 window.open(url,wName, 'width=800, height=360');
                 window.close();
             }
@@ -134,7 +138,7 @@ $(document).ready(function(){
 
 //close customer window
 $(document).ready(function(){
-    $("#closeCUST").click(function(){
+    $("#closeASSET").click(function(){
         window.close();
     });
 });

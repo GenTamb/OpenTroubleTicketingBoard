@@ -24,7 +24,7 @@ class User
 //destructor
     function __destruct()
     {
-        unset($this->username,$this->name,$this->surname,$this->position,$this->groupName);
+        $this->username;$this->name;$this->surname;$this->position;$this->groupName;
     }
     
 //getter

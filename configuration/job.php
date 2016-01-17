@@ -158,6 +158,7 @@ if(isset($_POST['finishSetup']))
         rename('../_installFolder/login.php','../login.php');
         rename('../_installFolder/setupScript.js','setupScript.js');
         rename('../_installFolder/setupScript.css','setupScript.css');
+        rename('../_installFolder/board.php','../board.php');
         echoResponse('yes',"Yes! We did it!\nEnjoy your board!");
     }
    }
@@ -308,6 +309,7 @@ if(isset($_POST['completeSetup']))
                          brand varchar(20),
                          model varchar(20),
                          site varchar(20),
+                         status ENUM('active','de-active'),
                          INDEX(code(20)),
                          INDEX(brand(20)),
                          INDEX(model(20)),
@@ -431,6 +433,16 @@ if(isset($_POST['searchCUSTOMERbyTOKEN']))
     else echo 0;
 }
 
+//function: search asset
+if(isset($_POST['searchASSETbyTOKEN']))
+{
+    include_once '../configuration/db.php';
+    include_once '../configuration/ClassAsset.php';
+    $token=$_POST['token'];
+    $asset=new Asset();
+    if($asset->getAssetBy($token)) $asset->printTabledAssetList('active');
+    else echo 0;
+}
 //function: update tkt
 
 if(isset($_POST['updateTKT']))
@@ -472,6 +484,30 @@ if(isset($_POST['updateCUST']))
     $customer=new Customer;
  
     $msg=$customer->updateCustomer($id,$customerName,$customerSurname,$customerType,$customerSite,$customerStatus);
+    echo $msg;
+    
+}
+
+//function: update asset
+
+if(isset($_POST['updateASSET']))
+{
+    include_once '../configuration/db.php';
+    include_once '../function/funcs.php';
+    include_once '../configuration/ClassAsset.php';
+    
+    $originalCode=sanitizeInput($_POST['originalAssetCode']);
+    $code=sanitizeInput($_POST['assetCode']);
+    $type=sanitizeInput($_POST['assetType']);
+    $model=sanitizeInput($_POST['assetModel']);
+    $brand=sanitizeInput($_POST['assetBrand']);
+    $site=sanitizeInput($_POST['assetSite']);
+    $ip=sanitizeInput($_POST['assetIp']);
+    $status=sanitizeInput($_POST['assetStatus']);
+    
+    $asset=new Asset;
+ 
+    $msg=$asset->updateAsset($originalCode,$code,$type,$brand,$model,$site,$ip,$status);
     echo $msg;
     
 }
@@ -524,6 +560,26 @@ if(isset($_POST['createTKT']))
     else echoResponse('no',$msg);
 }
 
+//function: create asset
+
+if(isset($_POST['createASSET']))
+{
+    include_once '../configuration/db.php';
+    include_once '../function/funcs.php';
+    include_once '../configuration/ClassAsset.php';
+    $code=sanitizeInput($_POST['assetCode']);
+    $type=sanitizeInput($_POST['assetType']);
+    $brand=sanitizeInput($_POST['assetBrand']);
+    $model=sanitizeInput($_POST['assetModel']);
+    $site=sanitizeInput($_POST['assetSite']);
+    $ip=sanitizeInput($_POST['assetIp']);
+ 
+    
+    $asset=new Asset;
+    $msg=$asset->createAsset($code,$type,$brand,$model,$site,$ip);
+    echoResponse('yes',$msg);
+    
+}
 
 
 

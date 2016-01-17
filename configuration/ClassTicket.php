@@ -26,7 +26,7 @@ class Ticket
     }
     public function __destruct()
     {
-        unset($this->id,$this->asset,$this->status,$this->category,$this->customerName,$this->customerSurname,$this->site,$this->openedBy,$this->assignedTo,$this->groupAssigned,$this->description,$this->solution,$this->openTime,$this->closeTime,$this->number);
+        $this->id;$this->asset;$this->status;$this->category;$this->customerName;$this->customerSurname;$this->site;$this->openedBy;$this->assignedTo;$this->groupAssigned;$this->description;$this->solution;$this->openTime;$this->closeTime;$this->number;
     }
     
     public function getTicketBy($token)

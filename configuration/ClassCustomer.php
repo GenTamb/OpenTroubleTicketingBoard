@@ -28,7 +28,7 @@ class Customer
     
     function __destruct()
     {
-        unlink($this->id,$this->name,$this->surname,$this->type,$this->site, $this->status,$this->number);
+        $this->id;$this->name;$this->surname;$this->type;$this->site; $this->status;$this->number;
     }
     
     public function getCustomerBy($token)

@@ -128,6 +128,39 @@ $(document).ready(function(){
     });
 });
 
+//search asset box
+$(document).ready(function(){
+    $("#searchAsset").click(function(e){
+        e.preventDefault();
+        var token=$("#assetField").val();
+        if (token=='')
+        {
+            alert('Field is empty');  
+        }
+        else
+        {
+            $.post('configuration/job.php',
+                   {
+                    searchASSETbyTOKEN:1,
+                    token:token
+                   },
+                   function(data)
+                   {
+                    var echoing;
+                    if (data==0)
+                    {
+                        echoing='No Asset found with that token';
+                    }
+                    else
+                    {
+                        echoing=data;
+                    }
+                    $("#pageBody").html(echoing);
+                    
+                   });
+        }
+    });
+});
 //open customer window
 $(document).ready(function(){
            $('#pageBody').on('click','.CUSTOMERID', function()
@@ -150,6 +183,17 @@ $(document).ready(function(){
            });
 });
 
+//open asset window
+$(document).ready(function(){
+           $('#pageBody').on('click','.ASSETCODE', function()
+           {
+           var assetCODE=$(this).text();
+           var url='board/assetWindow.php?id='+assetCODE;
+           var wName='ASSET CODE:'+assetCODE;
+           window.open(url,wName, 'width=800, height=360');
+           });
+});
+
 //open new customer window
 $(document).ready(function(){
     $("#customerNew").click(function(){
@@ -165,6 +209,16 @@ $(document).ready(function(){
     $("#tktNew").click(function(){
         var url='board/ticketWindow.php?new='+true;
         var wName='Creating New Ticket';
+        window.open(url,wName,'width=800, height=360');
+        
+    });
+});
+
+//open new asset window
+$(document).ready(function(){
+    $("#assetNew").click(function(){
+        var url='board/assetWindow.php?new='+true;
+        var wName='Creating New Asset';
         window.open(url,wName,'width=800, height=360');
         
     });
