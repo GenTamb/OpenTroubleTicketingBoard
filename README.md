@@ -36,7 +36,8 @@ TO DO:
 3) CRU for incidents - DONE
 4) CRUD for tech's group
 5) CRU for customers - DONE
-6) ...
+6) CRU for assets - DONE
+7) ...
 
 Feel free to contact me for any doubts or critics: www.gennarotamburrelli.eu
 
