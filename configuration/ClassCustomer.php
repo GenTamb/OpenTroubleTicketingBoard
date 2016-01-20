@@ -6,16 +6,23 @@ include_once '../configuration/db.php';
 
 class Customer
 {
-    public $id,$name,$surname,$type,$site,$status,$CTN,$number;
+    public $id=array();
+    public $name=array();
+    public $surname=array();
+    public $type=array();
+    public $site=array();
+    public $status=array();
+    public $CTN;
+    public $number;
     
     function __construct()
     {
-      $this->id='';
-      $this->name='';
-      $this->surname='';
-      $this->type='';
-      $this->site='';
-      $this->status='';
+      /*$this->id[]='';
+      $this->name[]='';
+      $this->surname[]='';
+      $this->type[]='';
+      $this->site[]='';
+      $this->status[]='';*/
       //getting Custom Customer Name
       $connection=new mysqli(HOST,USER,PSW,DB);
       $getCTN="SELECT tabName FROM tablelist WHERE tabType='customersTable'";

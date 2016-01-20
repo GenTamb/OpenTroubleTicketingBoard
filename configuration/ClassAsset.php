@@ -6,17 +6,25 @@ include_once '../configuration/db.php';
 
 class Asset
 {
-    public $code,$type,$brand,$model,$site,$ip,$status,$number;
+    
+    public $code=array();
+    public $type=array();
+    public $brand=array();
+    public $model=array();
+    public $site=array();
+    public $ip=array();
+    public $status=array();
+    public $number;
     
     function __construct()
     {
-      $this->code='';
-      $this->type='';
-      $this->brand='';
-      $this->model='';
-      $this->site='';
-      $this->status='';
-      $this->ip='';      
+      /*$this->code[]='';
+      $this->type[]='';
+      $this->brand[]='';
+      $this->model[]='';
+      $this->site[]='';
+      $this->status[]='';
+      $this->ip[]='';*/      
       $this->number=0;
     }
     
