@@ -4,7 +4,6 @@ include_once "../function/funcs.php";
 //setting up DataBase 
 if(isset($_POST['configureDB']))
 {
-include_once "../function/funcs.php";
 session_start();
 $dbName=sanitizeInput($_POST['dbName']);
 $host=sanitizeInput($_POST['host']);
@@ -24,11 +23,10 @@ if($connection->connect_error)
 
 
 //creating DB
-$createDB="CREATE DATABASE IF NOT EXISTS ".$dbName." CHARACTER SET utf8 COLLATE utf8_general_ci";
-$exec=$connection->query($createDB);
-if($exec)
+$createDB="CREATE DATABASE IF NOT EXISTS $dbName CHARACTER SET utf8 COLLATE utf8_general_ci";
+if($connection->query($createDB))
 {
-    echoResponse('yes',"DB ".$dbName." created successfully!");
+    echoResponse('yes',"DB $dbName created successfully!");
 }
 else 
 {
@@ -158,8 +156,8 @@ if(isset($_POST['finishSetup']))
     {
         unlink('../setup.php');
         rename('../_installFolder/login.php','../login.php');
-        rename('setupScript.js','../_installFolder/setupScript.js');
-        rename('setupScript.css','../_installFolder/setupStyle.css');
+        rename('../_installFolder/setupScript.js','setupScript.js');
+        rename('../_installFolder/setupScript.css','setupScript.css');
         rename('../_installFolder/board.php','../board.php');
         echoResponse('yes',"Yes! We did it!\nEnjoy your board!");
     }

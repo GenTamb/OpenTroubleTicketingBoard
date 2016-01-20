@@ -1,40 +1,27 @@
 <?php
-
+include_once 'configuration/db.php';
+include_once 'db.php';
 include_once '../configuration/db.php';
 
 
 class Ticket
 {
-    public $id=array();
-    public $asset=array();
-    public $status=array();
-    public $category=array();
-    public $customerName=array();
-    public $customerSurname=array();
-    public $site=array();
-    public $openedBy=array();
-    public $assignedTo=array();
-    public $groupAssigned=array();
-    public $description=array();
-    public $solution=array();
-    public $openTime=array();
-    public $closeTime=array();
-    public $number;
+    public $id,$asset,$status,$category,$customerName,$customerSurname,$site,$openedBy,$assignedTo,$groupAssigned,$description,$solution,$openTime,$closeTime,$number;
     public function __construct()
     {
-        /*$this->id[]='';
-        $this->asset[]='';
-        $this->status[]='';
-        $this->customerName[]='';
-        $this->customerSurname[]='';
-        $this->site[]='';
-        $this->openedBy[]='';
-        $this->assignedTo[]='';
-        $this->groupAssigned[]='';
-        $this->description[]='';
-        $this->solution[]='';
-        $this->openTime[]='';
-        $this->closeTime[]='';*/
+        $this->id='';
+        $this->asset='';
+        $this->status='';
+        $this->customerName='';
+        $this->customerSurname='';
+        $this->site='';
+        $this->openedBy='';
+        $this->assignedTo='';
+        $this->groupAssigned='';
+        $this->description='';
+        $this->solution='';
+        $this->openTime='';
+        $this->closeTime='';
         $this->number=0;
     }
     public function __destruct()
