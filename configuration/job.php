@@ -4,6 +4,7 @@ include_once "../function/funcs.php";
 //setting up DataBase 
 if(isset($_POST['configureDB']))
 {
+include_once "../function/funcs.php";
 session_start();
 $dbName=sanitizeInput($_POST['dbName']);
 $host=sanitizeInput($_POST['host']);
@@ -23,10 +24,11 @@ if($connection->connect_error)
 
 
 //creating DB
-$createDB="CREATE DATABASE IF NOT EXISTS $dbName CHARACTER SET utf8 COLLATE utf8_general_ci";
-if($connection->query($createDB))
+$createDB="CREATE DATABASE IF NOT EXISTS ".$dbName." CHARACTER SET utf8 COLLATE utf8_general_ci";
+$exec=$connection->query($createDB);
+if($exec)
 {
-    echoResponse('yes',"DB $dbName created successfully!");
+    echoResponse('yes',"DB ".$dbName." created successfully!");
 }
 else 
 {
@@ -156,8 +158,8 @@ if(isset($_POST['finishSetup']))
     {
         unlink('../setup.php');
         rename('../_installFolder/login.php','../login.php');
-        rename('../_installFolder/setupScript.js','setupScript.js');
-        rename('../_installFolder/setupScript.css','setupScript.css');
+        rename('setupScript.js','../_installFolder/setupScript.js');
+        rename('setupStyle.css','../_installFolder/setupStyle.css');
         rename('../_installFolder/board.php','../board.php');
         echoResponse('yes',"Yes! We did it!\nEnjoy your board!");
     }
@@ -197,7 +199,7 @@ if(isset($_POST['login']))
            $_SESSION['name']=$res['name'];
            $_SESSION['surname']=$res['surname'];
            $_SESSION['position']=$res['position'];
-           $_SESSION['groupName']=$res['groupName'];
+           if(isset($res['groupName'])) $_SESSION['groupName']=$res['groupName']; //the first time login does not have groupName in table
            $answer=array(1,$res['name'],$res['surname']);
            echo json_encode($answer);
        }
@@ -283,6 +285,7 @@ if(isset($_POST['addingCTN']))
              type varchar(20),
              site varchar(20),
              status ENUM('active','de-active'),
+             assetList varchar(500),
              INDEX (name(20)),
              INDEX (surname(30))) DEFAULT CHARSET=utf8 ENGINE InnoDB";
     $connection=new mysqli(HOST,USER,PSW,DB);
@@ -310,6 +313,7 @@ if(isset($_POST['completeSetup']))
                          model varchar(20),
                          site varchar(20),
                          status ENUM('active','de-active'),
+                         assignee int(6),
                          INDEX(code(20)),
                          INDEX(brand(20)),
                          INDEX(model(20)),
@@ -483,7 +487,7 @@ if(isset($_POST['updateCUST']))
     
     $customer=new Customer;
  
-    $msg=$customer->updateCustomer($id,$customerName,$customerSurname,$customerType,$customerSite,$customerStatus);
+    $msg=$customer->updateCustomer($id,$customerSurname,$customerName,$customerType,$customerSite,$customerStatus);
     echo $msg;
     
 }
@@ -504,10 +508,11 @@ if(isset($_POST['updateASSET']))
     $site=sanitizeInput($_POST['assetSite']);
     $ip=sanitizeInput($_POST['assetIp']);
     $status=sanitizeInput($_POST['assetStatus']);
+    $assignee=sanitizeInput($_POST['assetAssignee']);
     
     $asset=new Asset;
  
-    $msg=$asset->updateAsset($originalCode,$code,$type,$brand,$model,$site,$ip,$status);
+    $msg=$asset->updateAsset($originalCode,$code,$type,$brand,$model,$site,$ip,$status,$assignee);
     echo $msg;
     
 }
@@ -573,10 +578,11 @@ if(isset($_POST['createASSET']))
     $model=sanitizeInput($_POST['assetModel']);
     $site=sanitizeInput($_POST['assetSite']);
     $ip=sanitizeInput($_POST['assetIp']);
+    $assignee=sanitizeInput($_POST['assetAssignee']);
  
     
     $asset=new Asset;
-    $msg=$asset->createAsset($code,$type,$brand,$model,$site,$ip);
+    $msg=$asset->createAsset($code,$type,$brand,$model,$site,$ip,$assignee);
     echoResponse('yes',$msg);
     
 }

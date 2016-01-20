@@ -4,7 +4,7 @@ function sanitizeInput($string) //sanitize your inputs
     $string= strip_tags($string);
     $string= htmlentities($string);
     $string= stripslashes($string);
-    $string=mysql_real_escape_string($string); //to replace with undeprecated one
+    //$string=mysql_real_escape_string($string); //to replace with undeprecated one
     return $string;
 }
 

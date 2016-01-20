@@ -6,16 +6,24 @@ include_once '../configuration/db.php';
 
 class Customer
 {
-    public $id,$name,$surname,$type,$site,$status,$CTN,$number;
+    public $id=array();
+    public $name=array();
+    public $surname=array();
+    public $type=array();
+    public $site=array();
+    public $status=array();
+    public $CTN;
+    public $assetList=array();
+    public $number;
     
     function __construct()
     {
-      $this->id='';
-      $this->name='';
-      $this->surname='';
-      $this->type='';
-      $this->site='';
-      $this->status='';
+      /*$this->id[]='';
+      $this->name[]='';
+      $this->surname[]='';
+      $this->type[]='';
+      $this->site[]='';
+      $this->status[]='';*/
       //getting Custom Customer Name
       $connection=new mysqli(HOST,USER,PSW,DB);
       $getCTN="SELECT tabName FROM tablelist WHERE tabType='customersTable'";
@@ -28,13 +36,13 @@ class Customer
     
     function __destruct()
     {
-        $this->id;$this->name;$this->surname;$this->type;$this->site; $this->status;$this->number;
+        $this->id;$this->name;$this->surname;$this->type;$this->site; $this->status;$this->CTN;$this->assetList;$this->number;
     }
     
     public function getCustomerBy($token)
     {
         $connection=new mysqli(HOST,USER,PSW,DB);   
-        $query="SELECT id,name,surname,type,site,status FROM ".$this->CTN." WHERE id LIKE '".$token."%' ||
+        $query="SELECT id,name,surname,type,site,status,assetList FROM ".$this->CTN." WHERE id LIKE '".$token."%' ||
                                             name LIKE '".$token."%' ||
                                             surname LIKE '".$token."%' ||
                                             type LIKE '".$token."%' ||
@@ -53,6 +61,7 @@ class Customer
             $this->type[]=$res['type'];
             $this->site[]=$res['site'];
             $this->status[]=$res['status'];
+            $this->assetList[]=$res['assetList'];
             $this->number++;
             }
             $response=true;
@@ -122,7 +131,7 @@ class Customer
     }
         
     
-    public function updateCustomer($id,$name,$surname,$type,$site,$status)
+    public function updateCustomer($id,$surname,$name,$type,$site,$status,$assetList)
     {
         $this->id=$id;
         $this->name=$name;
@@ -130,17 +139,18 @@ class Customer
         $this->type=$type;
         $this->site=$site;
         $this->status=$status;
+        $this->assetList=$assetList;
         
         $connection=new mysqli(HOST,USER,PSW,DB);
         $query="UPDATE ".$this->CTN." SET name='".$this->name."',surname='".$this->surname."',type='".$this->type."',
-        site='".$this->site."',status='".$this->status."' WHERE id='".$this->id."'";
+        site='".$this->site."',status='".$this->status."',assetList='".$this->assetList."' WHERE id='".$this->id."'";
         if(!$exec=$connection->query($query)) $response=$connection->error;
         else $response="Customer Updated";
         $connection->close();
         return $response;
     }
     
-    public function createCustomer($name,$surname,$type,$site)
+    public function createCustomer($surname,$name,$type,$site)
     {
         $this->name=$name;
         $this->surname=$surname;
@@ -156,6 +166,31 @@ class Customer
         $connection->close();
         return $response;
     }
+    
+    public function getListedAssignedList()
+    {
+        if($this->assetList[0]=='') echo "NO ASSET ASSIGNED";
+        else
+        {
+        $str=$this->assignedList;
+        $slice=explode(",",$str);
+        echo "<ul id='assetList'>";
+        foreach($slice as $val) echo "<li><a href='#".$val."' class='assetREF'>".$val."</a></li>";
+        }
+    }
+    /*public function getCustomerAssignedAssetList($id)
+    {
+        $connection=new mysqli(HOST,USER,PSW,DB);
+        $query="SELECT assignee FROM assets WHERE assignee='".$id."'";
+        $exec=$connection->query($query);
+        $num=$exec->num_rows;
+        if($num!=0)
+        {
+            $res=$exec->fetch_assoc();
+            $
+            
+        }
+    }*/
     
 }
 

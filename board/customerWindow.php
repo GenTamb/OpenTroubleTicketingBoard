@@ -77,7 +77,15 @@ if(isset($_GET['id']))
                      case 'de-active': echo "<select id='customerStatus'><option value='active'>active</option><option value='de-active' selected>de-active</option></select>";
                                     break;
                   }echo "
-               </div>
+               </div>";
+               if(!isset($_GET['new']))
+               {
+                  echo "<div class='col-sm-3 col-md-3 col-lg-3>";
+                  $customer->getListedAssignedList();
+                  echo "</div>";
+               }
+
+            echo "
            </div>
            <div class='container-fluid'>
                ";

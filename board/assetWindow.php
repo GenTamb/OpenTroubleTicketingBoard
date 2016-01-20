@@ -3,6 +3,7 @@ session_start();
 include_once '../configuration/db.php';
 include_once '../configuration/ClassUser.php';
 include_once '../configuration/ClassAsset.php';
+include_once '../configuration/ClassCustomer.php';
 
 include_once '../function/funcs.php';
    
@@ -71,7 +72,7 @@ if(isset($_GET['id']))
                   <input type='text' class='disabled editable' id='assetIp' value='".$Asset->ip[0]."'>
                </div>
                <div class='col-sm-3 col-md-3 col-lg-3>
-                  <label for='customerStatus'>STATUS</label><br>";
+                  <label for='assetStatus'>STATUS</label><br>";
                   if(isset($_GET['new'])) echo "<select id='assetStatus'><option value='active' selected>active</option></select>";
                   else
                   switch($Asset->status[0])
@@ -81,6 +82,20 @@ if(isset($_GET['id']))
                      case 'de-active': echo "<select id='assetStatus'><option value='active'>active</option><option value='de-active' selected>de-active</option></select>";
                                     break;
                   }echo "
+               </div>
+               <div class='col-sm-3 col-md-3 col-lg-3>
+               <label for='assetAssignee'>ASSIGNEE</label><br>";
+               if(isset($_GET['new'])) echo "<input id='assetAssignee' type='text' class='disabled editable' value='' data-toggle='tooltip' data-placement='left' title='We need the ID. Use this searchbox to find the correct record and then click on the corresponding link' placeholder='search by Surname'>";
+               else
+               {
+                  $customer=new Customer;
+                  $customer->getCustomerBy($Asset->assignee[0]);
+                  if($customer->surname[0]!='' && $customer->name[0]!='') $assignee=$customer->surname[0].",".$customer->name[0];
+                  else $assignee='NOT ASSIGNED';
+                  echo "<input id='assetAssignee' type='text' class='disabled editable' value='".$assignee."'>";
+               }
+               echo "<div class='cointainer' id='hintSurname'></div>";
+               echo "
                </div>
            </div>
            <div class='container-fluid'>

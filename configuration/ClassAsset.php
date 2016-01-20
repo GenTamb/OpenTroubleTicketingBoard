@@ -6,32 +6,41 @@ include_once '../configuration/db.php';
 
 class Asset
 {
-    public $code,$type,$brand,$model,$site,$ip,$status,$number;
+    
+    public $code=array();
+    public $type=array();
+    public $brand=array();
+    public $model=array();
+    public $site=array();
+    public $ip=array();
+    public $status=array();
+    public $assignee=array();
+    public $number;
     
     function __construct()
     {
-      $this->code='';
-      $this->type='';
-      $this->brand='';
-      $this->model='';
-      $this->site='';
-      $this->status='';
-      $this->ip='';      
+      /*$this->code[]='';
+      $this->type[]='';
+      $this->brand[]='';
+      $this->model[]='';
+      $this->site[]='';
+      $this->status[]='';
+      $this->ip[]='';*/      
       $this->number=0;
     }
     
     function __destruct()
     {
-        $this->code;$this->type;$this->brand;$this->model;$this->site;$this->status;$this->ip;$this->number;
+        $this->code;$this->type;$this->brand;$this->model;$this->site;$this->status;$this->ip;$this->assignee;$this->number;
     }
     
     public function getAssetBy($token)
     {
         $connection=new mysqli(HOST,USER,PSW,DB);   
-        $query="SELECT code,type,brand,model,site,status,ip FROM assets WHERE code LIKE '".$token."%' ||
+        $query="SELECT code,type,brand,model,site,status,ip,assignee FROM assets WHERE code LIKE '".$token."%' ||
                                             type LIKE '".$token."%' || brand LIKE '".$token."%' ||
                                             model LIKE '".$token."%' || site LIKE '".$token."%' ||
-                                            status LIKE '".$token."%' || ip LIKE '".$token."%'";
+                                            status LIKE '".$token."%' || ip LIKE '".$token."%' || assignee LIKE '".$token."%'";
         if(!$exec=$connection->query($query))
         {
             $response=false;
@@ -47,6 +56,7 @@ class Asset
             $this->model[]=$res['model'];
             $this->status[]=$res['status'];
             $this->ip[]=$res['ip'];
+            $this->assignee[]=$res['assignee'];
             $this->number++;
             }
             $response=true;
@@ -68,7 +78,7 @@ class Asset
                    <table class='table'>
                      <thead>
                          <tr>
-                         <th>CODE</th><th>TYPE</th><th>STATUS</th>
+                         <th>CODE</th><th>TYPE</th><th>STATUS</th><th>ASSIGNEE</th>
                          </tr>
                      </thead>
                      <tbody>";
@@ -81,6 +91,7 @@ class Asset
                            echo "<td><a class='ASSETCODE' id='assetCODE' href='#".$this->code[$counter]."'>".$this->code[$counter]."</a></td>";
                            echo "<td>".$this->type[$counter]."</td>";
                            echo "<td>".$this->status[$counter]."</td>";
+                           echo "<td>".$this->assignee[$counter]."</td>";
                            echo "</tr>";
                            $counter++;
                            }
@@ -94,6 +105,7 @@ class Asset
                                 echo "<td><a class='ASSETCODE' id='assetCODE' href='#".$this->code[$counter]."'>".$this->code[$counter]."</a></td>";
                                 echo "<td>".$this->type[$counter]."</td>";
                                 echo "<td>".$this->status[$counter]."</td>";
+                                echo "<td>".$this->assignee[$counter]."</td>";
                                 echo "</tr>";
                                $counter++;
                               }
@@ -112,7 +124,7 @@ class Asset
     }
         
     
-    public function updateAsset($originaleCode,$code,$type,$brand,$model,$site,$ip,$status)
+    public function updateAsset($originaleCode,$code,$type,$brand,$model,$site,$ip,$status,$assignee)
     {
         $this->code=$code;
         $this->type=$type;
@@ -121,17 +133,18 @@ class Asset
         $this->site=$site;
         $this->ip=$ip;
         $this->status=$status;
+        $this->assignee=$assignee;
         
         $connection=new mysqli(HOST,USER,PSW,DB);
         $query="UPDATE assets SET code='".$this->code."',type='".$this->type."',brand='".$this->brand."',
-        model='".$this->model."',site='".$this->site."', ip='".$this->ip."',status='".$this->status."' WHERE code='".$originaleCode."'";
+        model='".$this->model."',site='".$this->site."', ip='".$this->ip."',status='".$this->status."',assignee='".$this->assignee."' WHERE code='".$originaleCode."'";
         if(!$exec=$connection->query($query)) $response=$connection->error;
         else $response="Asset Updated";
         $connection->close();
         return $response;
     }
     
-    public function createAsset($code,$type,$brand,$model,$site,$ip)
+    public function createAsset($code,$type,$brand,$model,$site,$ip,$assignee)
     {
         $this->code=$code;
         $this->type=$type;
@@ -139,10 +152,11 @@ class Asset
         $this->model=$model;
         $this->site=$site;
         $this->ip=$ip;
+        $this->assignee=$assignee;
         
         $connection=new mysqli(HOST,USER,PSW,DB);
-        $query="INSERT INTO assets (code,type,brand,model,site,ip,status)
-                VALUES ('".$this->code."','".$this->type."','".$this->brand."','".$this->model."','".$this->site."','".$this->ip."','active')";
+        $query="INSERT INTO assets (code,type,brand,model,site,ip,status,assignee)
+                VALUES ('".$this->code."','".$this->type."','".$this->brand."','".$this->model."','".$this->site."','".$this->ip."','active','".$this->assignee."')";
         if(!$exec=$connection->query($query)) $response=$connection->error;
         else $response=$this->code;
         $connection->close();

@@ -21,6 +21,7 @@ $(document).ready(function(){
         var assetSite=$("#assetSite").val();
         var assetStatus=$("#assetStatus").val();
         var assetIp=$("#assetIp").val();
+        var assetAssignee=$("#assetAssignee").val();
     $("#editASSET").on('click',function(){
         
     if($("#editASSET").text()=='Edit')
@@ -41,9 +42,10 @@ $(document).ready(function(){
         var assetSiteMOD=$("#assetSite").val();
         var assetStatusMOD=$("#assetStatus").val();
         var assetIpMOD=$("#assetIp").val();
+        var assetAssigneeMOD=$("#assetAssignee").val();
         //posting data
         
-        if(assetCode!=assetCodeMOD ||assetType!=assetTypeMOD ||assetModel!=assetModelMOD || assetBrand!=assetBrandMOD || assetSite!=assetSiteMOD || assetStatus!=assetStatusMOD || assetIp!=assetIpMOD)
+        if(assetCode!=assetCodeMOD ||assetType!=assetTypeMOD ||assetModel!=assetModelMOD || assetBrand!=assetBrandMOD || assetSite!=assetSiteMOD || assetStatus!=assetStatusMOD || assetIp!=assetIpMOD || assetAssignee!=assetAssigneeMOD)
         {
             $.post('../configuration/job.php',
                {
@@ -56,6 +58,7 @@ $(document).ready(function(){
                 assetSite:assetSiteMOD,
                 assetStatus:assetStatusMOD,
                 assetIp:assetIpMOD,
+                assetAssignee:assetAssigneeMOD
                 
                },
                function(data)
@@ -83,6 +86,7 @@ $(document).ready(function(){
     var assetBrand=$("#assetBrand").val();
     var assetSite=$("#assetSite").val();
     var assetIp=$("#assetIp").val();
+    var assetAssignee=$("#assetAssignee").val();
     
     //checking inputs
     var token='';
@@ -103,7 +107,7 @@ $(document).ready(function(){
                                 go=true;
                                 break;
     }
-    //posting datas to create Customer
+    //posting datas to create Asset
     if (go)
     {
         $.post('../configuration/job.php',
@@ -114,7 +118,8 @@ $(document).ready(function(){
             assetModel:assetModel,
             assetBrand:assetBrand,
             assetSite:assetSite,
-            assetIp:assetIp
+            assetIp:assetIp,
+            assetAssignee:assetAssignee
            },
            function(data)
            {
@@ -134,11 +139,43 @@ $(document).ready(function(){
    });
 });
 
+//hint assignee
+$(document).ready(function(){
+    $("#assetAssignee").keyup(function(){
+        var surname=$("#assetAssignee").val();
+        $.post('hint.php',
+               {
+                searchCustomer:1,
+                surname:surname
+               },
+               function(data)
+               {
+                $("#hintSurname").html(data);
+               }
+                );
+    });
+});
 
+//getting the ID from hint
+$(document).ready(function(){
+    $("#hintSurname").on('click','.hintID',function(){
+        var custID=$(this).html();
+        var res='You have selected the ID: ' + custID;
+        $("#hintSurname").html(res);
+    });
+});
 
 //close customer window
 $(document).ready(function(){
     $("#closeASSET").click(function(){
         window.close();
+    });
+});
+
+//enable tooltip
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+    $('#asideLeft').on('mouseover','[data-toggle="tooltip"]',function(){
+        $('[data-toggle="tooltip"]').tooltip();
     });
 });
