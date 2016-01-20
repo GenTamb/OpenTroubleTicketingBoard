@@ -78,12 +78,7 @@ if(isset($_GET['id']))
                                     break;
                   }echo "
                </div>";
-               if(!isset($_GET['new']))
-               {
-                  echo "<div class='col-sm-3 col-md-3 col-lg-3>";
-                  $customer->getListedAssignedList();
-                  echo "</div>";
-               }
+               
 
             echo "
            </div>

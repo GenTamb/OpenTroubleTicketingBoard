@@ -511,7 +511,7 @@ if(isset($_POST['updateASSET']))
     $assignee=sanitizeInput($_POST['assetAssignee']);
     
     $asset=new Asset;
- 
+    
     $msg=$asset->updateAsset($originalCode,$code,$type,$brand,$model,$site,$ip,$status,$assignee);
     echo $msg;
     
@@ -584,6 +584,29 @@ if(isset($_POST['createASSET']))
     $asset=new Asset;
     $msg=$asset->createAsset($code,$type,$brand,$model,$site,$ip,$assignee);
     echoResponse('yes',$msg);
+    
+}
+
+//function: add asset to list
+if(isset($_POST['updateAssetList']))
+{
+    include_once 'ClassCustomer.php';
+    $assetCode=$_POST['assetCode'];
+    $newCustomerID=$_POST['assetAssignee'];
+    $originalCustomerID=$_POST['originalAssetAssignee'];
+    if($newCustomerID!=$originalCustomerID)
+    {
+        $originalCustomer=new Customer();
+        $originalCustomer->getCustomerBy($originalCustomerID);
+        $originalCustomer->delAssetList($assetCode);
+        
+        $newCustomer=new Customer();
+        $newCustomer->getCustomerBy($newCustomerID);
+        $newCustomer->addAssetList($assetCode);
+        
+        echo $newCustomer->surname[0].",".$newCustomer->name[0];
+    }
+    else return 0;
     
 }
 

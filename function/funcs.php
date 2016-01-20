@@ -81,7 +81,7 @@ function checkLogin()
 {
     if(include_once ('db.php'))
     {
-        $loginPath=ROOT."login.php";
+        $loginPath=ROOT."/login.php";
     }
     else if(include_once ('../configuration/db.php'))
             {
@@ -105,6 +105,7 @@ function checkLogin()
      return true;
     }
 }
+
 
 function setupUser($user)
 {
@@ -233,6 +234,45 @@ function checkCustomerTable()
     else $response=false;
     return $response;
 }
+
+function populateCustomerAssetField($assetCode,$customerID)
+{
+    include_once '../configuration/ClassAsset.php';
+    include_once '../configuration/ClassCustomer.php';
+    
+    //declaring and populating asset and customer
+    $asset=new Asset();
+    $customer=new Customer();
+    $asset->getAssetBy($assetCode);
+    $customer->getCustomerBy($customerID);
+    $response=null;
+    //checking if code given is good, due to the behavior of getAssetBy function
+    if($assetCode==$asset->code) return $customer->addAssetList($assetCode);
+}
+
+function dePopulateCustomerAssetField($assetCode,$customerID)
+{
+    include_once '../configuration/ClassAsset.php';
+    include_once '../configuration/ClassCustomer.php';
+    
+    //declaring and populating asset and customer
+    $asset=new Asset();
+    $customer=new Customer();
+    $asset->getAssetBy($assetCode);
+    $customer->getCustomerBy($customerID);
+    $response=null;
+    //checking if code given is good, due to the behavior of getAssetBy function
+    if($assetCode==$asset->code)
+    {
+        if($customer->delAssetList($assetCode)) //do the update
+        {
+            $response=true;
+        }
+        else $response=false;
+    }
+    return $response;
+}
+
 
 
 ?>

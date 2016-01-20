@@ -84,17 +84,21 @@ if(isset($_GET['id']))
                   }echo "
                </div>
                <div class='col-sm-3 col-md-3 col-lg-3>
-               <label for='assetAssignee'>ASSIGNEE</label><br>";
-               if(isset($_GET['new'])) echo "<input id='assetAssignee' type='text' class='disabled editable' value='' data-toggle='tooltip' data-placement='left' title='We need the ID. Use this searchbox to find the correct record and then click on the corresponding link' placeholder='search by Surname'>";
+               <label for='assetAssignee'><a id='assigneLabel'>ASSIGNEE ID</a></label><br>";
+               if(isset($_GET['new'])) echo "<input id='assetAssignee' type='text' class='disabled editable' value='' data-toggle='tooltip' data-placement='left' title='We need the ID. Use the link on top to search the correct record and then click on the corresponding link' placeholder='Customer&#39s ID'>";
                else
                {
-                  $customer=new Customer;
-                  $customer->getCustomerBy($Asset->assignee[0]);
-                  if($customer->surname[0]!='' && $customer->name[0]!='') $assignee=$customer->surname[0].",".$customer->name[0];
-                  else $assignee='NOT ASSIGNED';
-                  echo "<input id='assetAssignee' type='text' class='disabled editable' value='".$assignee."'>";
+                 $Asset->assignee[0]==0 ? $assignee='NOT ASSIGNED' : $assignee=$Asset->assignee[0];
+                  echo "<input id='assetAssignee' type='text' class='disabled' value='".$assignee."'><br>";
+                  if($assignee!='NOT ASSIGNED')
+                  {
+                     $customer=new Customer();
+                     $customer->getCustomerBy($Asset->assignee[0]);
+                     echo "<input type='text' value='".$customer->surname[0].",".$customer->name[0]."' id='assigneName' disabled='true'>";
+                  }
                }
-               echo "<div class='cointainer' id='hintSurname'></div>";
+               //echo "<input id='assetAssigneeID' class='hidden' value='".$Asset->assignee[0]."'>";
+               
                echo "
                </div>
            </div>

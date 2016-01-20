@@ -156,7 +156,7 @@ class Customer
         $this->surname=$surname;
         $this->type=$type;
         $this->site=$site;
-        $this->status=$status;
+        
         
         $connection=new mysqli(HOST,USER,PSW,DB);
         $query="INSERT INTO ".$this->CTN." (name,surname,type,site,status)
@@ -167,7 +167,28 @@ class Customer
         return $response;
     }
     
-    public function getListedAssignedList()
+    public function addAssetList($assetCode)
+    {
+        $this->assetList[0].=$assetCode.",";
+        $connection=new mysqli(HOST,USER,PSW,DB);
+        $query="UPDATE ".$this->CTN." SET assetList='".$this->assetList[0]."' WHERE id='".$this->id[0]."'";
+        if(!$exec=$connection->query($query)) $response=$connection->error;
+        $connection->close();
+    }
+    
+    public function delAssetList($assetCode)
+    {
+        $token=$this->assetList[0];
+        $list=explode(",",$token);
+        if(in_array($assetCode,$list))   //checking if assetCode is in assetList
+        {
+            $needle=$assetCode.",";
+            $result=str_replace($needle,"",$token);
+            $this->updateCustomer($this->id[0],$this->surname[0],$this->name[0],$this->type[0],$this->site[0],$this->status[0],$result);
+        }
+    }
+    
+    /*public function getListedAssignedList()
     {
         if($this->assetList[0]=='') echo "NO ASSET ASSIGNED";
         else
@@ -178,7 +199,8 @@ class Customer
         foreach($slice as $val) echo "<li><a href='#".$val."' class='assetREF'>".$val."</a></li>";
         }
     }
-    /*public function getCustomerAssignedAssetList($id)
+    
+    public function getCustomerAssignedAssetList($id)
     {
         $connection=new mysqli(HOST,USER,PSW,DB);
         $query="SELECT assignee FROM assets WHERE assignee='".$id."'";
@@ -187,7 +209,7 @@ class Customer
         if($num!=0)
         {
             $res=$exec->fetch_assoc();
-            $
+            
             
         }
     }*/

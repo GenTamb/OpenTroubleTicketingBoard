@@ -56,7 +56,7 @@ class Asset
             $this->model[]=$res['model'];
             $this->status[]=$res['status'];
             $this->ip[]=$res['ip'];
-            $this->assignee[]=$res['assignee'];
+            is_null($res['assignee']) ? $this->assignee=0 : $this->assignee[]=$res['assignee'];
             $this->number++;
             }
             $response=true;
@@ -162,6 +162,7 @@ class Asset
         $connection->close();
         return $response;
     }
+
     
 }
 

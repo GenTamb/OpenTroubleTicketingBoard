@@ -18,6 +18,18 @@
 .space{
     padding:5px;
 }
+.hidden{
+    display:none;
+}
 #editASSET{
     width:50px;
+}
+#assigneLabel{
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+}
+#assigneName{
+    border: 1px dotted black;
+    width: 172px;
 }

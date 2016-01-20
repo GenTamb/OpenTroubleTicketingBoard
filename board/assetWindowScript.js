@@ -1,6 +1,6 @@
 //disable all fields
 $(document).ready(function(){
-    if ($("#assetCODE").text()!='')
+    if ($("#assetCODE").val()!='')
     {
          $(".disabled").prop("disabled",true);    
     }
@@ -44,8 +44,8 @@ $(document).ready(function(){
         var assetIpMOD=$("#assetIp").val();
         var assetAssigneeMOD=$("#assetAssignee").val();
         //posting data
-        
-        if(assetCode!=assetCodeMOD ||assetType!=assetTypeMOD ||assetModel!=assetModelMOD || assetBrand!=assetBrandMOD || assetSite!=assetSiteMOD || assetStatus!=assetStatusMOD || assetIp!=assetIpMOD || assetAssignee!=assetAssigneeMOD)
+       
+        if(!isNaN(assetAssigneeMOD) && (assetCode!=assetCodeMOD ||assetType!=assetTypeMOD ||assetModel!=assetModelMOD || assetBrand!=assetBrandMOD || assetSite!=assetSiteMOD || assetStatus!=assetStatusMOD || assetIp!=assetIpMOD || assetAssignee!=assetAssigneeMOD))
         {
             $.post('../configuration/job.php',
                {
@@ -59,21 +59,37 @@ $(document).ready(function(){
                 assetStatus:assetStatusMOD,
                 assetIp:assetIpMOD,
                 assetAssignee:assetAssigneeMOD
-                
                },
                function(data)
                {
                 alert(data);
                });
+            //updating asset List
+            $.post('../configuration/job.php',
+                   {
+                    updateAssetList:1,
+                    assetCode:assetCodeMOD,
+                    originalAssetAssignee:assetAssignee,
+                    assetAssignee:assetAssigneeMOD
+                   },
+                   function(data)
+                   {
+                    $("#assigneName").val(data);
+                   }
+                   );
         }
         else alert('Asset was not modified');
         
         $(".editable").prop("disabled",true);
         $(".editable").removeClass("activated");
         $(this).text('Edit');
+        //location.reload();
+        
     }
     //closing on click
+    
     });
+    
 });
 
 //manage create button
@@ -107,6 +123,11 @@ $(document).ready(function(){
                                 go=true;
                                 break;
     }
+    if (isNaN(assetAssignee))
+    {
+        alert('Assignee field can accept only numbers (Customer\'s ID)');
+        go=false;
+    }
     //posting datas to create Asset
     if (go)
     {
@@ -139,10 +160,26 @@ $(document).ready(function(){
    });
 });
 
+//pick Assignee
+$(document).ready(function(){
+    $("#assigneLabel").click(function(e){
+        if($("#editASSET").text()=='Edit')
+        {
+            e.preventDefault();
+        }
+        else
+        {
+        var url='pickToken.php?choose=assignee';
+        var wName='Pick Assignee';
+        window.open(url,wName, 'width=350, height=600');
+        }   
+    });
+});
+
 //hint assignee
 $(document).ready(function(){
-    $("#assetAssignee").keyup(function(){
-        var surname=$("#assetAssignee").val();
+    $("#assignee").keyup(function(){
+        var surname=$("#assignee").val();
         $.post('hint.php',
                {
                 searchCustomer:1,
@@ -160,8 +197,9 @@ $(document).ready(function(){
 $(document).ready(function(){
     $("#hintSurname").on('click','.hintID',function(){
         var custID=$(this).html();
-        var res='You have selected the ID: ' + custID;
-        $("#hintSurname").html(res);
+        alert('You have selected ID'+ custID);
+        window.opener.$("#assetAssignee").val(custID);
+        window.close();
     });
 });
 
