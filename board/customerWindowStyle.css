@@ -21,3 +21,6 @@
 #editCUST{
     width:50px;
 }
+#customerAssetList{
+    border: 1px dotted black;
+}

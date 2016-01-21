@@ -10,29 +10,38 @@ if(checkLogin()){
     echo "
        <html>
        <head>";
-       if(isset($_GET['choose']) && $_GET['choose']=='assignee') echo "<title>OpenTroubleTicketing | Pick Assignee </title>
+       if(isset($_GET['choose']) && $_GET['choose']=='assignee') echo "<title>OpenTroubleTicketing | Pick Customer </title>";
+       if(isset($_GET['choose']) && $_GET['choose']=='asset') echo "<title>OpenTroubleTicketing | Pick Asset </title>";
+       
+       echo"
        <meta charset='utf-8'>
        <meta name='viewport' content='width=device-width, initial-scale=1'>
        <link rel='icon' href='icon/icon.png'/>
        <link rel='stylesheet' href='../style/bootstrap.min.css'>
-       <link rel='stylesheet' href='assetWindowStyle.css'>
        <link rel='stylesheet' href='../style/defaultStyle.css'>
+       <link rel='stylesheet' href='pickToken.css'>
        <script src='../js/jquery.min.js'></script>
        <script src='../js/bootstrap.min.js'></script>
-       <script src='assetWindowScript.js'></script>
        <script src='../js/defaultScript.js'></script>
+       <script src='pickToken.js'></script>";
+       echo "
        </head>
        <body>
        <div class='container-fluid'>";
    if(isset($_GET['choose']) && $_GET['choose']=='assignee')
    {
        echo "<label for='assignee'>SEARCH ASSIGNEE</label><br>
-             <input type='text' id='assignee' value='' placeholder='Search by Surname'>
-             <div class='cointainer' id='hintSurname'></div>";
+             <input type='text' id='assignee' value='' placeholder='Search by Surname'>";
+             
+   }
+   if(isset($_GET['choose']) && $_GET['choose']=='asset')
+   {
+       echo "<label for='asset'>SEARCH ASSET</label><br>
+             <input type='text' id='asset' value='' placeholder='Search by Code'>";
    }
    
    
-   
+   echo "<div class='cointainer' id='hintsGot'></div>";
    echo "</div>
          </body>
          </html>";

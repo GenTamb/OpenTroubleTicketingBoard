@@ -13,12 +13,13 @@
     display:none;
 }
 
-.customBorder{
-    border: 1px solid black;
-    margin: 30px;
-    padding: 20px;
+.cbutton{
+       width:100px;
 }
 
+#controlList{
+       margin-top:50px;
+}
 .btn{
     margin: 10px;
 }

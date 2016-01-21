@@ -9,11 +9,10 @@ include_once '../function/funcs.php';
 if(isset($_POST['searchCustomer']))
 {
     $str=$_POST['surname'];
-    if(strlen($str)<=4) echo "Hints are avaiable for 4 or more chars";
+    if(strlen($str)<4) echo "Hints are avaiable for 4 or more chars";
     else
     {
         $customers=new Customer;
-        $connection=new mysqli(HOST,USER,PSW,DB);
         $customers->getCustomerBy($str);
         echo "<div id='hints'>";
         if($customers->number>0 && in_array('active',$customers->status))
@@ -21,7 +20,7 @@ if(isset($_POST['searchCustomer']))
             $counter=0;
             while($counter<$customers->number)
             {
-                if($customers->status[$counter]=='active') echo $customers->surname[$counter].",".$customers->name[$counter]."- ID: <a class='hintID' href='#".$customers->id[$counter]."'>".$customers->id[$counter]."</a><br>";
+                if($customers->status[$counter]=='active') echo "<span class='customerHintSN'>".$customers->surname[$counter].",".$customers->name[$counter]."</span>- ID: <a class='customerHint' href='#".$customers->id[$counter]."'>".$customers->id[$counter]."</a><br>";
                 $counter++;
             }
         }
@@ -30,6 +29,28 @@ if(isset($_POST['searchCustomer']))
     }
 }
 
+if(isset($_POST['searchAsset']))
+{
+    $str=$_POST['code'];
+    if(strlen($str)<3) echo "Hints are avaiable for 3 or more chars";
+    else
+    {
+        $assets=new Asset;
+        $assets->getAssetBy($str);
+        echo "<div id='hints'>";
+        if($assets->number>0 && in_array('active',$assets->status))
+        {
+            $counter=0;
+            while($counter<$assets->number)
+            {
+                if($assets->status[$counter]=='active') echo "Asset CODE: <a class='assetHint' href='#".$assets->code[$counter]."'>".$assets->code[$counter]."</a><br>";
+                $counter++;
+            }
+        }
+        else echo "No asset found";
+    echo "</div>";
+    }
+}
 
 
 

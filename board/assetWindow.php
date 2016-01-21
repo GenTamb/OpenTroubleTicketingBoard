@@ -46,7 +46,7 @@ if(isset($_GET['id']))
            <div class='row'>
                <div class='col-sm-3 col-md-3 col-lg-3>
                    <label for='customerID'>ID</label><br>";
-                   if(isset($_GET['new'])) echo "<input type='text' class='disabled editable' id='assetCODE' value=''>";
+                   if(isset($_GET['new'])) echo "<input type='text' class='disabled editable' id='assetCODE'  value=''>";
                    else echo "<input type='text' class='disabled editable' id='assetCODE' value='".$Asset->code[0]."'>"; echo "    
                </div>
                <div class='col-sm-3 col-md-3 col-lg-3>
@@ -103,10 +103,15 @@ if(isset($_GET['id']))
                </div>
            </div>
            <div class='container-fluid'>
+              <div class='row'>
+                <div class='col-sm-6 col-lg-6'>
                ";
                if(isset($_GET['new'])) echo "<button id='createASSET' class='btn btn-info btn-sm'>Create</button>";
                else echo "<button id='editASSET' class='btn btn-danger btn-sm'>Edit</button>";
                echo "<button id='closeASSET' class='btn btn-info btn-sm'>Close Window</button>
+                </div>
+                <div class='col-sm-6 col-lg-6' id='hints'></div>
+               </div> 
            </div>
        </div>
        </body>

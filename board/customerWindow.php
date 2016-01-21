@@ -77,8 +77,18 @@ if(isset($_GET['id']))
                      case 'de-active': echo "<select id='customerStatus'><option value='active'>active</option><option value='de-active' selected>de-active</option></select>";
                                     break;
                   }echo "
-               </div>";
-               
+               </div>
+               <div class='col-sm-3 col-md-3 col-lg-3> id='custASSlist'";
+                  /*if($customer->assetList[0]!='' || $customer->assetList!=null)
+                  {
+                     $list=$customer->assetList[0];
+                     $exploded=explode(",",$list);
+                     echo "<ul id='customerAssetList'>";
+                     foreach($exploded as $asset) echo "<li><a href='#".$asset."' class='ASSETASSIGNED'>".$asset."</a></li>";
+                     echo "</ul>";
+                  }*/
+                  $customer->getListedAssignedList();
+                  echo "</div>";
 
             echo "
            </div>

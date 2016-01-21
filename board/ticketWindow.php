@@ -48,21 +48,21 @@ if(isset($_GET['id']))
        echo "
            <div class='row'>
                <div class='col-sm-3 col-md-3 col-lg-3 space'>
-                   <label for='tktCustomer'>Customer</label><br>";
+                   <label for='tktCustomer'><a id='customerPick' class='picker'>Customer</a></label><br>";
                    if(isset($_GET['new'])) echo "<input type='text' class='disabled editable' id='tktCustomer' placeholder='surname,name' value=''>";
                    else echo "<input type='text' class='disabled' id='tktCustomer' value='".$ticket->customerSurname[0].",".$ticket->customerName[0]."'>";
                echo " 
                </div>
                <div class='col-sm-3 col-md-3 col-lg-3 space'>
-                   <label for='tktAsset'>Asset</label><br>
+                   <label for='tktAsset'><a id='assetPick' class='picker'>Asset</a></label><br>
                    <input type='text' class='disabled editable' id='tktAsset' value='".$ticket->asset[0]."'>
                </div>
                <div class='col-sm-3 col-md-3 col-lg-3 space'>
-                   <label for='tktCategory'>Category</label><br>
+                   <label for='tktCategory'><a id='categoryPick' class='picker'>Category</a></label><br>
                    <input type='text' class='disabled editable' id='tktCategory' value='".$ticket->category[0]."'>
                </div>
                 <div class='col-sm-3 col-md-3 col-lg-3 space'>
-                   <label for='tktStatus'>Status</label><br>
+                   <label for='tktStatus'><a id='statusPick' class='picker'>Status</a></label><br>
                    <input type='text' class='disabled editable' id='tktStatus' value='".$ticket->status[0]."'>
                </div>
            </div>
@@ -74,11 +74,11 @@ if(isset($_GET['id']))
                    echo "
                </div>
                <div class='col-sm-3 col-md-3 col-lg-3 space'>
-                   <label for='tktAssignedTo'>Assigned To</label><br>
+                   <label for='tktAssignedTo'><a id='assignedToPick' class='picker'>Assigned To</a></label><br>
                    <input type='text' class='disabled editable' id='tktAssignedTo' value='".$ticket->assignedTo[0]."'>
                </div>
                <div class='col-sm-3 col-md-3 col-lg-3 space'>
-                   <label for='tktGroup'>Group Assigned</label><br>
+                   <label for='tktGroup'><a id='groupAssignedPick' class='picker'>Group Assigned</a></label><br>
                    <input type='text' class='disabled editable' id='tktGroup' value='".$ticket->groupAssigned[0]."'>
                </div>
            </div>

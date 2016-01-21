@@ -188,18 +188,24 @@ class Customer
         }
     }
     
-    /*public function getListedAssignedList()
+    public function getListedAssignedList()
     {
-        if($this->assetList[0]=='') echo "NO ASSET ASSIGNED";
+        echo "<div class='container'>";
+        echo "<label for='customerAssetList'>ASSET LIST</label><br>";
+        echo "<ul id='customerAssetList'>";
+        if($this->assetList[0]=='' || $this->assetList[0]==null) echo "<li><a href='#noAsset' class='NOASSET'>NO ASSET ASSIGNED</a></li>";
         else
         {
-        $str=$this->assignedList;
+        $str=$this->assetList[0];
         $slice=explode(",",$str);
-        echo "<ul id='assetList'>";
-        foreach($slice as $val) echo "<li><a href='#".$val."' class='assetREF'>".$val."</a></li>";
+     
+        foreach($slice as $val) if($val!='') echo "<li><a href='#".$val."' class='assetREF'>".$val."</a></li>";
+        
         }
+        echo "</ul>";
+        echo "</div>";
     }
-    
+    /*
     public function getCustomerAssignedAssetList($id)
     {
         $connection=new mysqli(HOST,USER,PSW,DB);

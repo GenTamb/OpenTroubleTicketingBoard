@@ -10,7 +10,7 @@ checkLogin();
 if(isset($_POST['set']))
 {
     if(checkFirstSetup()) echo "
-    <script src='board/controlPanel/scriptCC.js'></script>
+    <script src='board/scriptCC.js'></script>
     <link rel='stylesheet' href='board/boardStyle.css'>
     <h1>First Setup</h1>
     <div class='container-fluid'>
@@ -44,23 +44,17 @@ if(isset($_POST['set']))
     </div>
     </div>";
     if(!checkFirstSetup()) echo "
-    <script src='board/controlPanel/scriptCC.js'></script>
+    <script src='board/scriptCC.js'></script>
     <link rel='stylesheet' href='board/boardStyle.css'>
-    <div class='container-fluid' id='menu'>
+    <div class='container' id='menu'>
     <h2>Command Center</h2>
-      <div class='row'>
-        <div class='col-sm-4 col-lg-4 customBorder text-center'>
-           <p><strong>User Panel</strong></p>
-           <button class='btn btn-info btn-sm' id='addUser'>Add User</button><button class='btn btn-info btn-sm' id='editUser'>Edit User</button>
-        </div>
-      <div class='col-sm-4 col-lg-4 customBorder text-center'>
-           <p><strong>Group Panel</strong></p>
-           <button class='btn btn-info btn-sm' id='addGroup'>Add Group</button><button class='btn btn-info btn-sm' id='editGroup'>Edit Group</button>
-      </div>
-      <div class='col-sm-4 col-lg-4 customBorder text-center'>
-           <p><strong>Site Panel</strong></p>
-           <button class='btn btn-info btn-sm' id='addSite'>Add Group</button><button class='btn btn-info btn-sm' id='editSite'>Edit Group</button>
-      </div>   
+      <div class='cointainer' id='controlList'>
+        <ul>
+            <li><button class='btn btn-info btn-sm cbutton' id='userPanel'>User Panel</button></li>
+            <li><button class='btn btn-info btn-sm cbutton' id='groupPanel'>Group Panel</button></li>
+            <li><button class='btn btn-info btn-sm cbutton' id='sitePanel'>Site Panel</button></li>
+            <li><button class='btn btn-info btn-sm cbutton' id='categoryPanel'>Category Panel</button></li>
+        </ul>
       </div>
     </div>
    

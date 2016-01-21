@@ -130,7 +130,15 @@ $(document).ready(function(){
    });
 });
 
-
+//open customer's asset list entry
+$(document).ready(function(){
+    $(".assetREF").on('click',function(){
+       var assetCODE=$(this).text();
+       var url='assetWindow.php?id='+assetCODE;
+       var wName='ASSET CODE:'+assetCODE;
+       window.open(url,wName, 'width=800, height=360');
+    });
+});
 
 //close customer window
 $(document).ready(function(){

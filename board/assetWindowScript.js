@@ -160,7 +160,15 @@ $(document).ready(function(){
    });
 });
 
-//pick Assignee
+
+/******************************************************************************************************************************
+ ******************************************************************************************************************************
+ ******************************************************************************************************************************
+                                                    script for pickToken.php
+ ******************************************************************************************************************************
+ ******************************************************************************************************************************
+ ******************************************************************************************************************************/                                                
+//pick Assignee - pickToken opener
 $(document).ready(function(){
     $("#assigneLabel").click(function(e){
         if($("#editASSET").text()=='Edit')
@@ -176,32 +184,7 @@ $(document).ready(function(){
     });
 });
 
-//hint assignee
-$(document).ready(function(){
-    $("#assignee").keyup(function(){
-        var surname=$("#assignee").val();
-        $.post('hint.php',
-               {
-                searchCustomer:1,
-                surname:surname
-               },
-               function(data)
-               {
-                $("#hintSurname").html(data);
-               }
-                );
-    });
-});
 
-//getting the ID from hint
-$(document).ready(function(){
-    $("#hintSurname").on('click','.hintID',function(){
-        var custID=$(this).html();
-        alert('You have selected ID'+ custID);
-        window.opener.$("#assetAssignee").val(custID);
-        window.close();
-    });
-});
 
 //close customer window
 $(document).ready(function(){

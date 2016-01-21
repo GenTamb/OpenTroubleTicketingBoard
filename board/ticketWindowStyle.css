@@ -21,3 +21,8 @@
 #editTKT{
     width:50px;
 }
+.picker{
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+}
