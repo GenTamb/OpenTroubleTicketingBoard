@@ -148,7 +148,7 @@ $(document).ready(function(){
             {
                 alert('Created Asset: '+data[1]);
                 var assCODE=data[1];
-                var url='assetWindow.php?id='+assCODE;
+                var url='windowAsset.php?id='+assCODE;
                 var wName='ASSET ID:'+assCODE;
                 window.open(url,wName, 'width=800, height=360');
                 window.close();

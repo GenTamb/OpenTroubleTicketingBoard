@@ -166,7 +166,7 @@ $(document).ready(function(){
             {
                 alert('Created Ticket: '+data[1]);
                 var tktID=data[1];
-                var url='ticketWindow.php?id='+tktID;
+                var url='windowTicket.php?id='+tktID;
                 var wName='Ticket ID:'+tktID;
                 window.open(url,wName, 'width=800, height=360');
                 window.close();
@@ -178,47 +178,65 @@ $(document).ready(function(){
    });
 });
 
-//update tkt
-/*
+/******************************************************************************************************************************
+ ******************************************************************************************************************************
+ ******************************************************************************************************************************
+                                                    script for pickToken.php
+ ******************************************************************************************************************************
+ ******************************************************************************************************************************
+ ******************************************************************************************************************************/    
+//pickToken.php opener
+
 $(document).ready(function(){
-    $("#editTKT").click(function(){
-    
-        var asset=$("#tktAsset").val();
-        var category=$("#tktCategory").val();
-        var status=$("#tktStatus").val();
-        var openedBy=$("#tktOpenedBy").val();
-        var assignedTo=$("#tktAssignedTo").val();
-        var group=$("#tktGroup").val();
-        var closeTime=$("#tktCloseTime").val();
-        var description=$("#tktDescription").val();
-        var solution=$("#tktSolution").val();
-        var closeTime;
-        if (status=='closed') closeTime='not closed yet'; 
-        else closeTime=Date();
+    $(".picker").click(function(e){
+        if($("#editTKT").text()=='Edit')
+        {
+            e.preventDefault();
+        }
+        else
+        {
+            var what=$(this).text();
+            var url;
+            var wname;
+            switch (what)
+            {
+                case 'Customer':
+                    url='pickToken.php?choose=assignee';
+                    wname='Pick Customer';
+                    break;
+                case 'Asset':
+                    url='pickToken.php?choose=asset';
+                    wname='Pick Asset';
+                    break;
+                case 'Category':
+                    url='pickToken.php?choose=category';
+                    wname='Pick Category';
+                    break;
+                case 'Status':
+                    url='pickToken.php?choose=status';
+                    wname='Pick Status';
+                    break;
+                case 'Assigned To':
+                    url='pickToken.php?choose=assignedTo';
+                    wname='Pick Assignee';
+                    break;
+                case 'Group Assigned':
+                    url='pickToken.php?choose=groupAssigned';
+                    wname='Pick Group';
+                    break;
+            }
         
-        $.post('../configuration/job.php',
-               {
-                updateTKT:1,
-                asset:asset,
-                category:category,
-                status:status,
-                assignedTo:assignedTo,
-                group:group,
-                closeTime:closeTime,
-                description:description,
-                solution:solution
-               },
-               function(data)
-               {
-                //something
-               }
-              );
+        window.open(url,wname, 'width=350, height=600');
+        }   
     });
 });
-*/
-/*
- * function to check values
- */
+
+
+
+
+
+
+
 
 //close ticket window
 $(document).ready(function(){

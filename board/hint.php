@@ -43,7 +43,7 @@ if(isset($_POST['searchAsset']))
             $counter=0;
             while($counter<$assets->number)
             {
-                if($assets->status[$counter]=='active') echo "Asset CODE: <a class='assetHint' href='#".$assets->code[$counter]."'>".$assets->code[$counter]."</a><br>";
+                if($assets->status[$counter]=='active') echo "<li><a class='assetHint' href='#".$assets->code[$counter]."'>".$assets->code[$counter]."</a></li>";
                 $counter++;
             }
         }

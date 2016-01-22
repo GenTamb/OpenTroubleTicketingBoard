@@ -98,7 +98,7 @@ setupUser($user);
     <?php if($user->getPosition()=='admin' || $user->getPosition()=='superuser')
           {
              echo "   
-             <li><a href='#controlPanel' id='controlPanelButton'>Control Panel</a></li>";
+             <li><a href='#cpanel' id='cpanelButton'>Control Panel</a></li>";
           }
     ?>
     <li class='dropdown'>

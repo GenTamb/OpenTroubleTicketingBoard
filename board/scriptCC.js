@@ -57,8 +57,10 @@ $(document).ready(function(){
                     if (data[0]=='yes') {
                         $("#finishSetup").addClass('divHidden');
                         $("#complete").removeClass('divHidden');
+                        window.open('login.php',"_top","fullscreen=1");
                     }
                     alert(data[1]);
+                    
                 },
                 "json");
         });

@@ -32,11 +32,11 @@ if(isset($_GET['id']))
        <meta name='viewport' content='width=device-width, initial-scale=1'>
        <link rel='icon' href='icon/icon.png'/>
        <link rel='stylesheet' href='../style/bootstrap.min.css'>
-       <link rel='stylesheet' href='assetWindowStyle.css'>
+       <link rel='stylesheet' href='windowAssetStyle.css'>
        <link rel='stylesheet' href='../style/defaultStyle.css'>
        <script src='../js/jquery.min.js'></script>
        <script src='../js/bootstrap.min.js'></script>
-       <script src='assetWindowScript.js'></script>
+       <script src='windowAssetScript.js'></script>
        <script src='../js/defaultScript.js'></script>
        </head>
        <body>

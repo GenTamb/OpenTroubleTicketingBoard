@@ -13,10 +13,10 @@ $(document).ready(function(){
 
 //draw control panel in pageBody
 $(document).ready(function(){
-    $("#controlPanelButton").click(function(){
+    $("#cpanelButton").click(function(){
         
         //pageUrl=$(this).attr('href');
-        $.post("board/controlPanel.php",
+        $.post("board/cpanel.php",
                { set: 1
                },
                function(data)
@@ -166,7 +166,7 @@ $(document).ready(function(){
            $('#pageBody').on('click','.CUSTOMERID', function()
            {
            var customerID=$(this).text();
-           var url='board/customerWindow.php?id='+customerID;
+           var url='board/windowCustomer.php?id='+customerID;
            var wName='Customer ID:'+customerID;
            window.open(url,wName, 'width=800, height=360');
            });
@@ -177,7 +177,7 @@ $(document).ready(function(){
            $('#pageBody').on('click','.TKTID', function()
            {
            var tktID=$(this).text();
-           var url='board/ticketWindow.php?id='+tktID;
+           var url='board/windowTicket.php?id='+tktID;
            var wName='Ticket ID:'+tktID;
            window.open(url,wName, 'width=800, height=360');
            });
@@ -188,7 +188,7 @@ $(document).ready(function(){
            $('#pageBody').on('click','.ASSETCODE', function()
            {
            var assetCODE=$(this).text();
-           var url='board/assetWindow.php?id='+assetCODE;
+           var url='board/windowAsset.php?id='+assetCODE;
            var wName='ASSET CODE:'+assetCODE;
            window.open(url,wName, 'width=800, height=360');
            });
@@ -197,7 +197,7 @@ $(document).ready(function(){
 //open new customer window
 $(document).ready(function(){
     $("#customerNew").click(function(){
-        var url='board/customerWindow.php?new='+true;
+        var url='board/windowCustomer.php?new='+true;
         var wName='Creating New Customer';
         window.open(url,wName,'width=800, height=360');
         
@@ -207,7 +207,7 @@ $(document).ready(function(){
 //open new ticket window
 $(document).ready(function(){
     $("#tktNew").click(function(){
-        var url='board/ticketWindow.php?new='+true;
+        var url='board/windowTicket.php?new='+true;
         var wName='Creating New Ticket';
         window.open(url,wName,'width=800, height=360');
         
@@ -217,7 +217,7 @@ $(document).ready(function(){
 //open new asset window
 $(document).ready(function(){
     $("#assetNew").click(function(){
-        var url='board/assetWindow.php?new='+true;
+        var url='board/windowAsset.php?new='+true;
         var wName='Creating New Asset';
         window.open(url,wName,'width=800, height=360');
         

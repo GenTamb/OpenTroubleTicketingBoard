@@ -118,7 +118,7 @@ $(document).ready(function(){
             {
                 alert('Created Customer: '+data[1]);
                 var custID=data[1];
-                var url='customerWindow.php?id='+custID;
+                var url='windowCustomer.php?id='+custID;
                 var wName='Customer ID:'+custID;
                 window.open(url,wName, 'width=800, height=360');
                 window.close();
@@ -134,7 +134,7 @@ $(document).ready(function(){
 $(document).ready(function(){
     $(".assetREF").on('click',function(){
        var assetCODE=$(this).text();
-       var url='assetWindow.php?id='+assetCODE;
+       var url='windowAsset.php?id='+assetCODE;
        var wName='ASSET CODE:'+assetCODE;
        window.open(url,wName, 'width=800, height=360');
     });

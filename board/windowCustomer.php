@@ -31,11 +31,11 @@ if(isset($_GET['id']))
        <meta name='viewport' content='width=device-width, initial-scale=1'>
        <link rel='icon' href='icon/icon.png'/>
        <link rel='stylesheet' href='../style/bootstrap.min.css'>
-       <link rel='stylesheet' href='customerWindowStyle.css'>
+       <link rel='stylesheet' href='windowCustomerStyle.css'>
        <link rel='stylesheet' href='../style/defaultStyle.css'>
        <script src='../js/jquery.min.js'></script>
        <script src='../js/bootstrap.min.js'></script>
-       <script src='customerWindowScript.js'></script>
+       <script src='windowCustomerScript.js'></script>
        <script src='../js/defaultScript.js'></script>
        </head>
        <body>

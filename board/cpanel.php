@@ -53,7 +53,7 @@ if(isset($_POST['set']))
             <li><button class='btn btn-info btn-sm cbutton' id='userPanel'>User Panel</button></li>
             <li><button class='btn btn-info btn-sm cbutton' id='groupPanel'>Group Panel</button></li>
             <li><button class='btn btn-info btn-sm cbutton' id='sitePanel'>Site Panel</button></li>
-            <li><button class='btn btn-info btn-sm cbutton' id='categoryPanel'>Category Panel</button></li>
+            <li><button class='btn btn-info btn-sm cbutton' id='cpanelCategory'>Category Panel</button></li>
         </ul>
       </div>
     </div>

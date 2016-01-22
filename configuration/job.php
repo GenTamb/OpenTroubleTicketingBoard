@@ -320,7 +320,7 @@ if(isset($_POST['completeSetup']))
                          INDEX(ip(20)),
                          PRIMARY KEY(code)) DEFAULT CHARSET=utf8 ENGINE InnoDB";
     $connection=new mysqli(HOST,USER,PSW,DB);
-    if($execQuery=$connection->query($createAssetsTable)) seedTableList('assets','services');
+    if($execQuery=$connection->query($createAssetsTable)) seedTableList('assets','assets');
     else echoResponse('no',$connection->error);
     //create table sites
     $createSitesTable="CREATE TABLE IF NOT EXISTS sites
@@ -329,7 +329,7 @@ if(isset($_POST['completeSetup']))
                         INDEX(name(30)),
                         INDEX(street(50)),
                         PRIMARY KEY(name)) DEFAULT CHARSET=utf8 ENGINE InnoDB";
-    if($execQuery=$connection->query($createSitesTable)) seedTableList('sites','services');
+    if($execQuery=$connection->query($createSitesTable)) seedTableList('sites','sites');
     else echoResponse('no',$connection->error);
     //create table messages
     $createMessageTable="CREATE TABLE IF NOT EXISTS messages
@@ -337,7 +337,7 @@ if(isset($_POST['completeSetup']))
                           sender varchar(20),
                           target varchar(20),
                           body varchar(500)) DEFAULT CHARSET=utf8 ENGINE InnoDB";
-    if($execQuery=$connection->query($createMessageTable)) seedTableList('messages','services');
+    if($execQuery=$connection->query($createMessageTable)) seedTableList('messages','messages');
     else echoResponse('no',$connection->error);
     //create table tickets
     $createSitesTable="CREATE TABLE IF NOT EXISTS tickets
@@ -358,10 +358,10 @@ if(isset($_POST['completeSetup']))
                         INDEX(asset(20)),
                         INDEX(customerSurname(30)),
                         INDEX(category(30))) DEFAULT CHARSET=utf8 ENGINE InnoDB";
-    if($execQuery=$connection->query($createSitesTable)) seedTableList('tickets','services');
+    if($execQuery=$connection->query($createSitesTable)) seedTableList('tickets','tickets');
     else echoResponse('no',$connection->error);
-    echoResponse('yes','Enjoy!');
-    
+    $connection->close();
+    echoResponse('yes','Enjoy!\nPlease, relogin..');
 }
 
 //function: looking for new messages
