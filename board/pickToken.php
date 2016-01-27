@@ -9,10 +9,11 @@ include_once '../function/funcs.php';
 if(checkLogin()){
     echo "
        <html>
-       <head>";
-       if(isset($_GET['choose']) && $_GET['choose']=='assignee') echo "<title>OpenTroubleTicketing | Pick Customer </title>";
-       if(isset($_GET['choose']) && $_GET['choose']=='asset') echo "<title>OpenTroubleTicketing | Pick Asset </title>";
-       
+       <head>
+       <title>OpenTroubleTicketing | ";
+       if(isset($_GET['choose']) && $_GET['choose']=='assignee') echo "Pick Customer </title>";
+       if(isset($_GET['choose']) && $_GET['choose']=='asset') echo "Pick Asset </title>";
+       if(isset($_GET['choose']) && $_GET['choose']=='category') echo "Pick Category </title>";
        echo"
        <meta charset='utf-8'>
        <meta name='viewport' content='width=device-width, initial-scale=1'>
@@ -38,6 +39,10 @@ if(checkLogin()){
    {
        echo "<label for='asset'>SEARCH ASSET</label><br>
              <input type='text' id='asset' value='' placeholder='Search by Code'>";
+   }
+   if(isset($_GET['choose']) && $_GET['choose']=='asset')
+   {
+    
    }
    
    

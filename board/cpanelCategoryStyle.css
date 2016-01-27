@@ -1,10 +1,20 @@
-.customerHintSN{
+#newCat{
+    display:none;
+}
+.entry{
     cursor: pointer;
     text-decoration: underline;
-    color: red;
+    color: blue;
 }
 #tableCatName{
     cursor: pointer;
     text-decoration: underline;
     color: blue;
+}
+
+#close{
+    margin-left:200px;
+}
+.hidden{
+    display:none;
 }

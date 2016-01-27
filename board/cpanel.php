@@ -10,7 +10,7 @@ checkLogin();
 if(isset($_POST['set']))
 {
     if(checkFirstSetup()) echo "
-    <script src='board/scriptCC.js'></script>
+    
     <link rel='stylesheet' href='board/boardStyle.css'>
     <h1>First Setup</h1>
     <div class='container-fluid'>
@@ -44,7 +44,6 @@ if(isset($_POST['set']))
     </div>
     </div>";
     if(!checkFirstSetup()) echo "
-    <script src='board/scriptCC.js'></script>
     <link rel='stylesheet' href='board/boardStyle.css'>
     <div class='container' id='menu'>
     <h2>Command Center</h2>

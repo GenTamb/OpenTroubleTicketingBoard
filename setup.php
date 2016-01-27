@@ -22,7 +22,7 @@ $_SESSION['root']=dirname(__FILE__);
         <h3>Setup DB</h3>
         <form role="form">
             <div class="form-group">
-                <label for="dbName">Enter the name's DB</label>
+                <label for="dbName">Enter the DB's name</label>
                 <input type="text" class="form-control" id="dbName" size="10" placeholder="DB name">
             </div>
             <div class="form-group">

@@ -360,8 +360,14 @@ if(isset($_POST['completeSetup']))
                         INDEX(category(30))) DEFAULT CHARSET=utf8 ENGINE InnoDB";
     if($execQuery=$connection->query($createSitesTable)) seedTableList('tickets','tickets');
     else echoResponse('no',$connection->error);
+    //create table categories
+    $createCategoryTable="CREATE TABLE IF NOT EXISTS category
+                       (name varchar(50) NOT NULL PRIMARY KEY,
+                        description varchar(500)) DEFAULT CHARSET=utf8 ENGINE InnoDB";
+    if($execQuery=$connection->query($createCategoryTable)) seedTableList('category','categories');
+    else echoResponse('no',$connection->error);
     $connection->close();
-    echoResponse('yes','Enjoy!\nPlease, relogin..');
+    echoResponse('yes','Enjoy!Please, relogin..');
 }
 
 //function: looking for new messages
@@ -572,6 +578,7 @@ if(isset($_POST['createASSET']))
     include_once '../configuration/db.php';
     include_once '../function/funcs.php';
     include_once '../configuration/ClassAsset.php';
+    include_once '../configuration/ClassCustomer.php';
     $code=sanitizeInput($_POST['assetCode']);
     $type=sanitizeInput($_POST['assetType']);
     $brand=sanitizeInput($_POST['assetBrand']);
@@ -581,8 +588,11 @@ if(isset($_POST['createASSET']))
     $assignee=sanitizeInput($_POST['assetAssignee']);
  
     
-    $asset=new Asset;
+    $asset=new Asset();
     $msg=$asset->createAsset($code,$type,$brand,$model,$site,$ip,$assignee);
+    $customer=new Customer();
+    $customer->getCustomerBy($assignee);
+    $customer->addAssetList($code);
     echoResponse('yes',$msg);
     
 }
@@ -610,6 +620,76 @@ if(isset($_POST['updateAssetList']))
     
 }
 
+//function: cpanelCategory - get categories 
+if(isset($_POST['getCategories']))
+{
+    include_once '../configuration/db.php';
+    $connection=new mysqli(HOST,USER,PSW,DB);
+    $query="SELECT name,description FROM category WHERE 1";
+    if(!$exec=$connection->query($query)) echo $connection->error;
+    else
+    {
+        $rows=$exec->num_rows;
+        if($rows==0) echo 'No category created';
+        else
+        {
+             echo "<div class='table-responsive'>
+                    <table class='table'>
+                      <thead>
+                         <tr><th>NAME</th><th>DESCRIPTION</th></tr>
+                      </thead>
+                      <tbody>";
+         while($res=$exec->fetch_assoc()) echo "<tr><td id='tableCatName'>".$res['name']."</td><td>".$res['description']."</td></tr>";
+         echo "</tbody>
+               </table>
+               </div>";
+        }
+    }
+    $connection->close();
+}
 
+//function: cpanelCategory - add category 
+if(isset($_POST['addCategory']))
+{
+    include_once '../configuration/db.php';
+    $name=sanitizeInput($_POST['catName']);
+    $desc=sanitizeInput($_POST['catDesc']);
+    $connection=new mysqli(HOST,USER,PSW,DB);
+    $query="INSERT INTO category (name,description) VALUES ('".$name."','".$desc."')";
+    if(!$exec=$connection->query($query)) echo $connection->error;
+    else echo "Correctly inserted category: ".$name;
+    $connection->close();
+}
 
+//function: cpanelCategory - edit category
+if(isset($_POST['modifyCategory']))
+{
+    include_once '../configuration/db.php';
+    include_once '../function/funcs.php';
+    $originalCatDesc=sanitizeInput($_POST['originalCatDesc']);
+    $originalCatName=sanitizeInput($_POST['originalCatName']);
+    $catDesc=sanitizeInput($_POST['catDesc']);
+    $catName=sanitizeInput($_POST['catName']);
+    
+    $connection=new mysqli(HOST,USER,PSW,DB);
+    $query="UPDATE category SET name='".$catName."',description='".$catDesc."' WHERE name='".$originalCatName."'";
+    $exec=$connection->query($query);
+    if($exec) echo "Category updated!";
+    else echo $connection->error;
+    $connection->close();
+}
+
+//function: cpanelCategory - edit category
+if(isset($_POST['delCategory']))
+{
+    include_once '../configuration/db.php';
+    include_once '../function/funcs.php';
+    $catName=sanitizeInput($_POST['catName']);
+    $connection=new mysqli(HOST,USER,PSW,DB);
+    $query="DELETE FROM category WHERE name='".$catName."'";
+    $exec=$connection->query($query);
+    if($exec) echo "Category deleted!";
+    else echo $connection->error;
+    $connection->close();
+}
 ?>

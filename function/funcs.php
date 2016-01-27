@@ -106,15 +106,21 @@ function checkLogin()
     }
 }
 
-
 function setupUser($user)
 {
-    
+    include_once ('../configuration/ClassUser.php');
     $user->setUsername($_SESSION['username']);
     $user->setName($_SESSION['name']);
     $user->setSurname($_SESSION['surname']);
     $user->setPosition($_SESSION['position']);
     $user->setGroup($_SESSION['groupName']);
+}
+
+function checkUserAdminOrSuperUser($user)
+{
+    include_once ('../configuration/ClassUser.php');
+    ($user->getPosition()=='admin' || $user->getPosition()=='superuser') ? $res=true : $res=false;
+    return $res;
 }
 
 //check first setup
@@ -234,7 +240,7 @@ function checkCustomerTable()
     else $response=false;
     return $response;
 }
-
+/*  not used
 function populateCustomerAssetField($assetCode,$customerID)
 {
     include_once '../configuration/ClassAsset.php';
@@ -272,6 +278,7 @@ function dePopulateCustomerAssetField($assetCode,$customerID)
     }
     return $response;
 }
+*/
 
 
 

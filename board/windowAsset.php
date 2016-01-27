@@ -94,7 +94,7 @@ if(isset($_GET['id']))
                   {
                      $customer=new Customer();
                      $customer->getCustomerBy($Asset->assignee[0]);
-                     echo "<input type='text' value='".$customer->surname[0].",".$customer->name[0]."' id='assigneName' disabled='true'>";
+                     echo "<input type='text' value='".$customer->surname[0].",".$customer->name[0]."' id='assigneName' disabled='true'>"; //customer's name box
                   }
                }
                //echo "<input id='assetAssigneeID' class='hidden' value='".$Asset->assignee[0]."'>";

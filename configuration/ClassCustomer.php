@@ -193,7 +193,7 @@ class Customer
         echo "<div class='container'>";
         echo "<label for='customerAssetList'>ASSET LIST</label><br>";
         echo "<ul id='customerAssetList'>";
-        if($this->assetList[0]=='' || $this->assetList[0]==null) echo "<li><a href='#noAsset' class='NOASSET'>NO ASSET ASSIGNED</a></li>";
+        if($this->assetList[0]=='' || is_null($this->assetList[0])) echo "<li><a href='#noAsset' class='NOASSET'>NO ASSET ASSIGNED</a></li>";
         else
         {
         $str=$this->assetList[0];

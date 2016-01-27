@@ -62,6 +62,30 @@ if(window.name=='Pick Asset')
         });
     });
 }
+
+if (window.name=='Pick Category')
+{
+ //list categories
+    $(document).ready(function(){
+        $.post('../configuration/job.php',
+               {
+                getCategories:1
+               },
+               function(data)
+               {
+                $("#hintsGot").html(data);
+               });
+    });
+
+    $(document).ready(function(){
+    $("#hintsGot").on('click','#tableCatName',function()
+                         {
+                            var catName=$(this).text();
+                            window.opener.$("#tktCategory").val(catName);
+                            window.close();
+                         });
+    });
+}
 /******************************************************
  *                windowAsset funcs                   *
  ******************************************************               
